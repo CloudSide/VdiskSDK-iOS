@@ -2,15 +2,21 @@ VdiskSDK-iOS
 ============
 RESTful API文档地址:
 http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
---------------------------------------------------------------------
-============
+
+
+[![](http://service.t.sina.com.cn/widget/qmd/1656360925/02781ba4/4.png)](http://weibo.com/u/1656360925?s=6uyXnP)
+
+-----
+Usage
+=====
 
 包含头文件: `#import "VdiskSDK.h"`
 
-============
+--------------
+- 登录认证相关
+--------------
 
-实例化VdiskSession
--------------------
+- 实例化VdiskSession
 
 ```objective-c
 
@@ -22,9 +28,8 @@ session.delegate = self;
 
 ```
 
-======================================
-判断是否已登录, 如果没有，则授权并登录
---------------------------------------
+- 判断是否已登录, 如果没有, 则授权并登录
+
 
 ```objective-c
 if (![[VdiskSession sharedSession] isLinked]) {
@@ -34,8 +39,7 @@ if (![[VdiskSession sharedSession] isLinked]) {
 ```
 
 
-实现VdiskSessionDelegate
-------------------------
+- 实现VdiskSessionDelegate
 
 ```objective-c
 
@@ -84,10 +88,13 @@ if (![[VdiskSession sharedSession] isLinked]) {
 }
 ```
 
-=============
+----------
+- 接口调用
+==========
 
-上传文件
---------
+- 上传文件
+----------
+
 
 - 实例化VdiskRestClient
 
@@ -105,7 +112,7 @@ _vdiskRestClient.delegate = self;
 [_vdiskRestClient uploadFile:@"要保存的文件名" toPath:@"目标路径(不含文件名)" withParentRev:nil fromPath:@"本地文件全路径"];
 
 ```
-- 实现Delegate
+- 实现上传相关的VdiskRestClientDelegate
 
 ```objective-c
 
