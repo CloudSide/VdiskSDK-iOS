@@ -1,0 +1,612 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3F1CB4DD159890B300F16CDE /* MediaFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1CB4DC159890B300F16CDE /* MediaFilesViewController.m */; };
+		3F1CB4DF159891DD00F16CDE /* MediaFilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F1CB4DE159891DD00F16CDE /* MediaFilesViewController.xib */; };
+		3F1CB4E81598967B00F16CDE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1CB4E71598967B00F16CDE /* MediaPlayer.framework */; };
+		3F2C26EF16995069001C7AFB /* SinaWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F2C26EE16995069001C7AFB /* SinaWeibo.bundle */; };
+		3F40BE4F159C22D60018EE4C /* CopyRefViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F40BE4D159C22D60018EE4C /* CopyRefViewController.m */; };
+		3F40BE50159C22D60018EE4C /* CopyRefViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F40BE4E159C22D60018EE4C /* CopyRefViewController.xib */; };
+		3F40BE55159C3E650018EE4C /* CopyFromCopyRefViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F40BE53159C3E640018EE4C /* CopyFromCopyRefViewController.m */; };
+		3F40BE56159C3E650018EE4C /* CopyFromCopyRefViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F40BE54159C3E650018EE4C /* CopyFromCopyRefViewController.xib */; };
+		3F40BE5A159C89230018EE4C /* MediaFilesFromRefViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F40BE58159C89220018EE4C /* MediaFilesFromRefViewController.m */; };
+		3F40BE5B159C89230018EE4C /* MediaFilesFromRefViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F40BE59159C89220018EE4C /* MediaFilesFromRefViewController.xib */; };
+		3F5A37E015901A2600E40E58 /* CatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F5A37DF15901A2600E40E58 /* CatalogViewController.m */; };
+		3F6C76A3158F4A280046BDDF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6C76A2158F4A280046BDDF /* Security.framework */; };
+		3F83CF32169ACE0A0016D362 /* ShareFileToFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F83CF30169ACE0A0016D362 /* ShareFileToFriendsViewController.m */; };
+		3F83CF33169ACE0A0016D362 /* ShareFileToFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F83CF31169ACE0A0016D362 /* ShareFileToFriendsViewController.xib */; };
+		3F8795211590643E001E5E32 /* UploadFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87951F1590643E001E5E32 /* UploadFileViewController.m */; };
+		3F8795221590643E001E5E32 /* UploadFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F8795201590643E001E5E32 /* UploadFileViewController.xib */; };
+		3F879534159073FF001E5E32 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F879533159073FF001E5E32 /* AssetsLibrary.framework */; };
+		3F87954015916B3C001E5E32 /* LoadFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F87953E15916B3C001E5E32 /* LoadFileViewController.m */; };
+		3F87954115916B3C001E5E32 /* LoadFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F87953F15916B3C001E5E32 /* LoadFileViewController.xib */; };
+		3FA19042158F469C002FF989 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA19041158F469C002FF989 /* UIKit.framework */; };
+		3FA19044158F469C002FF989 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA19043158F469C002FF989 /* Foundation.framework */; };
+		3FA19046158F469C002FF989 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA19045158F469C002FF989 /* CoreGraphics.framework */; };
+		3FA1904C158F469C002FF989 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA1904A158F469C002FF989 /* InfoPlist.strings */; };
+		3FA1904E158F469C002FF989 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1904D158F469C002FF989 /* main.m */; };
+		3FA19052158F469C002FF989 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA19051158F469C002FF989 /* AppDelegate.m */; };
+		3FA19055158F469C002FF989 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA19054158F469C002FF989 /* RootViewController.m */; };
+		3FA19058158F469C002FF989 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FA19056158F469C002FF989 /* RootViewController.xib */; };
+		3FA349A615986EE2008C4E90 /* ThumbnailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA349A415986EE2008C4E90 /* ThumbnailsViewController.m */; };
+		3FA349A715986EE2008C4E90 /* ThumbnailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FA349A515986EE2008C4E90 /* ThumbnailsViewController.xib */; };
+		3FB1D03615903AD7008B34AF /* AccountInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB1D03415903AD7008B34AF /* AccountInfoViewController.m */; };
+		3FB1D03715903AD7008B34AF /* AccountInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FB1D03515903AD7008B34AF /* AccountInfoViewController.xib */; };
+		3FB1D03F15904ABD008B34AF /* MetadataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB1D03E15904ABD008B34AF /* MetadataViewController.m */; };
+		3FBA43D316807C4F008F31CD /* RecommendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA43D216807C4F008F31CD /* RecommendViewController.m */; };
+		3FC9381F1654AD1E00EF889F /* libVdiskSDK-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC9381E1654AD1500EF889F /* libVdiskSDK-iOS.a */; };
+		3FE3BF66165CCD8C00ACD976 /* BlitzViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF64165CCD8C00ACD976 /* BlitzViewController.m */; };
+		3FE3BF67165CCD8C00ACD976 /* BlitzViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FE3BF65165CCD8C00ACD976 /* BlitzViewController.xib */; };
+		3FEE176316537D3200D0D3D7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FEE176216537D3200D0D3D7 /* Default-568h@2x.png */; };
+		3FEE178616537D7100D0D3D7 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FEE178516537D7100D0D3D7 /* CFNetwork.framework */; };
+		3FEE178816537D7700D0D3D7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FEE178716537D7700D0D3D7 /* libz.dylib */; };
+		3FEE178A16537D8300D0D3D7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FEE178916537D8300D0D3D7 /* SystemConfiguration.framework */; };
+		3FEE178C16537D8800D0D3D7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FEE178B16537D8800D0D3D7 /* MobileCoreServices.framework */; };
+		3FF0F7711592DBE600FD3DBA /* RevisionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF0F7701592DBE600FD3DBA /* RevisionsViewController.m */; };
+		3FF0F7741592E74E00FD3DBA /* RevisionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FF0F7731592E74E00FD3DBA /* RevisionsViewController.xib */; };
+		3FF0F77815930F5500FD3DBA /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FF0F77515930F5500FD3DBA /* Icon-72.png */; };
+		3FF0F77915930F5500FD3DBA /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FF0F77615930F5500FD3DBA /* Icon.png */; };
+		3FF0F77C15930FE200FD3DBA /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FF0F77B15930FE200FD3DBA /* Icon@2x.png */; };
+		62592D7915D89ADB009D29B5 /* UploadBigFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62592D7715D89ADB009D29B5 /* UploadBigFileViewController.m */; };
+		62592D7A15D89ADB009D29B5 /* UploadBigFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62592D7815D89ADB009D29B5 /* UploadBigFileViewController.xib */; };
+		62D731091591B7BD000D5353 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62D731081591B7BD000D5353 /* SearchViewController.m */; };
+		62D731121591C18A000D5353 /* SharesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62D731101591C18A000D5353 /* SharesViewController.m */; };
+		62D731131591C18A000D5353 /* SharesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D731111591C18A000D5353 /* SharesViewController.xib */; };
+		62D7311B1591D403000D5353 /* CreateFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62D731191591D403000D5353 /* CreateFolderViewController.m */; };
+		62D7311C1591D403000D5353 /* CreateFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D7311A1591D403000D5353 /* CreateFolderViewController.xib */; };
+		62D731201591DC58000D5353 /* DeleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62D7311E1591DC58000D5353 /* DeleteViewController.m */; };
+		62D731211591DC58000D5353 /* DeleteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D7311F1591DC58000D5353 /* DeleteViewController.xib */; };
+		62D731251591DFF5000D5353 /* CopyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62D731231591DFF5000D5353 /* CopyViewController.m */; };
+		62D731261591DFF5000D5353 /* CopyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D731241591DFF5000D5353 /* CopyViewController.xib */; };
+		62D7312A1591E3B3000D5353 /* MoveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62D731281591E3B2000D5353 /* MoveViewController.m */; };
+		62D7312B1591E3B3000D5353 /* MoveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D731291591E3B3000D5353 /* MoveViewController.xib */; };
+		62E470061592CC860072D908 /* RestoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62E470041592CC860072D908 /* RestoreViewController.m */; };
+		62E470071592CC860072D908 /* RestoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62E470051592CC860072D908 /* RestoreViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3FC9381D1654AD1500EF889F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3FC938161654AD1500EF889F /* VdiskSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3FA18FB0158F43D0002FF989;
+			remoteInfo = "VdiskSDK-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3F1CB4DB159890B300F16CDE /* MediaFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFilesViewController.h; sourceTree = "<group>"; };
+		3F1CB4DC159890B300F16CDE /* MediaFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFilesViewController.m; sourceTree = "<group>"; };
+		3F1CB4DE159891DD00F16CDE /* MediaFilesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaFilesViewController.xib; sourceTree = "<group>"; };
+		3F1CB4E71598967B00F16CDE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		3F2C26EE16995069001C7AFB /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
+		3F40BE4C159C22D60018EE4C /* CopyRefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CopyRefViewController.h; sourceTree = "<group>"; };
+		3F40BE4D159C22D60018EE4C /* CopyRefViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CopyRefViewController.m; sourceTree = "<group>"; };
+		3F40BE4E159C22D60018EE4C /* CopyRefViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CopyRefViewController.xib; sourceTree = "<group>"; };
+		3F40BE52159C3E640018EE4C /* CopyFromCopyRefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CopyFromCopyRefViewController.h; sourceTree = "<group>"; };
+		3F40BE53159C3E640018EE4C /* CopyFromCopyRefViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CopyFromCopyRefViewController.m; sourceTree = "<group>"; };
+		3F40BE54159C3E650018EE4C /* CopyFromCopyRefViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CopyFromCopyRefViewController.xib; sourceTree = "<group>"; };
+		3F40BE57159C89210018EE4C /* MediaFilesFromRefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFilesFromRefViewController.h; sourceTree = "<group>"; };
+		3F40BE58159C89220018EE4C /* MediaFilesFromRefViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFilesFromRefViewController.m; sourceTree = "<group>"; };
+		3F40BE59159C89220018EE4C /* MediaFilesFromRefViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaFilesFromRefViewController.xib; sourceTree = "<group>"; };
+		3F5A37DE15901A2500E40E58 /* CatalogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalogViewController.h; sourceTree = "<group>"; };
+		3F5A37DF15901A2600E40E58 /* CatalogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalogViewController.m; sourceTree = "<group>"; };
+		3F6C76A2158F4A280046BDDF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3F83CF2F169ACE0A0016D362 /* ShareFileToFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareFileToFriendsViewController.h; sourceTree = "<group>"; };
+		3F83CF30169ACE0A0016D362 /* ShareFileToFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareFileToFriendsViewController.m; sourceTree = "<group>"; };
+		3F83CF31169ACE0A0016D362 /* ShareFileToFriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareFileToFriendsViewController.xib; sourceTree = "<group>"; };
+		3F87951E1590643E001E5E32 /* UploadFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadFileViewController.h; sourceTree = "<group>"; };
+		3F87951F1590643E001E5E32 /* UploadFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadFileViewController.m; sourceTree = "<group>"; };
+		3F8795201590643E001E5E32 /* UploadFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadFileViewController.xib; sourceTree = "<group>"; };
+		3F879533159073FF001E5E32 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		3F87953D15916B3C001E5E32 /* LoadFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadFileViewController.h; sourceTree = "<group>"; };
+		3F87953E15916B3C001E5E32 /* LoadFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadFileViewController.m; sourceTree = "<group>"; };
+		3F87953F15916B3C001E5E32 /* LoadFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadFileViewController.xib; sourceTree = "<group>"; };
+		3FA1903D158F469C002FF989 /* VdiskSDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VdiskSDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FA19041158F469C002FF989 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		3FA19043158F469C002FF989 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3FA19045158F469C002FF989 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3FA19049158F469C002FF989 /* VdiskSDKExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VdiskSDKExample-Info.plist"; sourceTree = "<group>"; };
+		3FA1904B158F469C002FF989 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3FA1904D158F469C002FF989 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3FA1904F158F469C002FF989 /* VdiskSDKExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VdiskSDKExample-Prefix.pch"; sourceTree = "<group>"; };
+		3FA19050158F469C002FF989 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3FA19051158F469C002FF989 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3FA19053158F469C002FF989 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		3FA19054158F469C002FF989 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		3FA19057158F469C002FF989 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+		3FA349A315986EE2008C4E90 /* ThumbnailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailsViewController.h; sourceTree = "<group>"; };
+		3FA349A415986EE2008C4E90 /* ThumbnailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailsViewController.m; sourceTree = "<group>"; };
+		3FA349A515986EE2008C4E90 /* ThumbnailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThumbnailsViewController.xib; sourceTree = "<group>"; };
+		3FB1D03315903AD7008B34AF /* AccountInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountInfoViewController.h; sourceTree = "<group>"; };
+		3FB1D03415903AD7008B34AF /* AccountInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountInfoViewController.m; sourceTree = "<group>"; };
+		3FB1D03515903AD7008B34AF /* AccountInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountInfoViewController.xib; sourceTree = "<group>"; };
+		3FB1D03D15904ABD008B34AF /* MetadataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetadataViewController.h; sourceTree = "<group>"; };
+		3FB1D03E15904ABD008B34AF /* MetadataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetadataViewController.m; sourceTree = "<group>"; };
+		3FBA43D116807C4E008F31CD /* RecommendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendViewController.h; sourceTree = "<group>"; };
+		3FBA43D216807C4F008F31CD /* RecommendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendViewController.m; sourceTree = "<group>"; };
+		3FC938161654AD1500EF889F /* VdiskSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VdiskSDK.xcodeproj; path = ../../VdiskSDK/VdiskSDK.xcodeproj; sourceTree = "<group>"; };
+		3FE3BF63165CCD8C00ACD976 /* BlitzViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlitzViewController.h; sourceTree = "<group>"; };
+		3FE3BF64165CCD8C00ACD976 /* BlitzViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlitzViewController.m; sourceTree = "<group>"; };
+		3FE3BF65165CCD8C00ACD976 /* BlitzViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlitzViewController.xib; sourceTree = "<group>"; };
+		3FEE176216537D3200D0D3D7 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
+		3FEE178516537D7100D0D3D7 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		3FEE178716537D7700D0D3D7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3FEE178916537D8300D0D3D7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3FEE178B16537D8800D0D3D7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		3FF0F76F1592DBE600FD3DBA /* RevisionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RevisionsViewController.h; sourceTree = "<group>"; };
+		3FF0F7701592DBE600FD3DBA /* RevisionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RevisionsViewController.m; sourceTree = "<group>"; };
+		3FF0F7731592E74E00FD3DBA /* RevisionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RevisionsViewController.xib; sourceTree = "<group>"; };
+		3FF0F77515930F5500FD3DBA /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		3FF0F77615930F5500FD3DBA /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		3FF0F77B15930FE200FD3DBA /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		62592D7615D89ADB009D29B5 /* UploadBigFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadBigFileViewController.h; sourceTree = "<group>"; };
+		62592D7715D89ADB009D29B5 /* UploadBigFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadBigFileViewController.m; sourceTree = "<group>"; };
+		62592D7815D89ADB009D29B5 /* UploadBigFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadBigFileViewController.xib; sourceTree = "<group>"; };
+		62D731071591B7BD000D5353 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		62D731081591B7BD000D5353 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		62D7310F1591C18A000D5353 /* SharesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharesViewController.h; sourceTree = "<group>"; };
+		62D731101591C18A000D5353 /* SharesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharesViewController.m; sourceTree = "<group>"; };
+		62D731111591C18A000D5353 /* SharesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SharesViewController.xib; sourceTree = "<group>"; };
+		62D731181591D403000D5353 /* CreateFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateFolderViewController.h; sourceTree = "<group>"; };
+		62D731191591D403000D5353 /* CreateFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateFolderViewController.m; sourceTree = "<group>"; };
+		62D7311A1591D403000D5353 /* CreateFolderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateFolderViewController.xib; sourceTree = "<group>"; };
+		62D7311D1591DC58000D5353 /* DeleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteViewController.h; sourceTree = "<group>"; };
+		62D7311E1591DC58000D5353 /* DeleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteViewController.m; sourceTree = "<group>"; };
+		62D7311F1591DC58000D5353 /* DeleteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeleteViewController.xib; sourceTree = "<group>"; };
+		62D731221591DFF4000D5353 /* CopyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CopyViewController.h; sourceTree = "<group>"; };
+		62D731231591DFF5000D5353 /* CopyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CopyViewController.m; sourceTree = "<group>"; };
+		62D731241591DFF5000D5353 /* CopyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CopyViewController.xib; sourceTree = "<group>"; };
+		62D731271591E3B2000D5353 /* MoveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveViewController.h; sourceTree = "<group>"; };
+		62D731281591E3B2000D5353 /* MoveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveViewController.m; sourceTree = "<group>"; };
+		62D731291591E3B3000D5353 /* MoveViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveViewController.xib; sourceTree = "<group>"; };
+		62E470031592CC860072D908 /* RestoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreViewController.h; sourceTree = "<group>"; };
+		62E470041592CC860072D908 /* RestoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestoreViewController.m; sourceTree = "<group>"; };
+		62E470051592CC860072D908 /* RestoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RestoreViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3FA1903A158F469C002FF989 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FC9381F1654AD1E00EF889F /* libVdiskSDK-iOS.a in Frameworks */,
+				3F6C76A3158F4A280046BDDF /* Security.framework in Frameworks */,
+				3FEE178C16537D8800D0D3D7 /* MobileCoreServices.framework in Frameworks */,
+				3FEE178A16537D8300D0D3D7 /* SystemConfiguration.framework in Frameworks */,
+				3FEE178816537D7700D0D3D7 /* libz.dylib in Frameworks */,
+				3FEE178616537D7100D0D3D7 /* CFNetwork.framework in Frameworks */,
+				3F1CB4E81598967B00F16CDE /* MediaPlayer.framework in Frameworks */,
+				3F879534159073FF001E5E32 /* AssetsLibrary.framework in Frameworks */,
+				3FA19042158F469C002FF989 /* UIKit.framework in Frameworks */,
+				3FA19044158F469C002FF989 /* Foundation.framework in Frameworks */,
+				3FA19046158F469C002FF989 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3F40BE5C159C89350018EE4C /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				3FEE176216537D3200D0D3D7 /* Default-568h@2x.png */,
+				3FF0F77B15930FE200FD3DBA /* Icon@2x.png */,
+				3FF0F77515930F5500FD3DBA /* Icon-72.png */,
+				3FF0F77615930F5500FD3DBA /* Icon.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		3F5A37D1158F57A800E40E58 /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				3FB1D0291590395C008B34AF /* ViewControllers */,
+				3FA19050158F469C002FF989 /* AppDelegate.h */,
+				3FA19051158F469C002FF989 /* AppDelegate.m */,
+				3FA19053158F469C002FF989 /* RootViewController.h */,
+				3FA19054158F469C002FF989 /* RootViewController.m */,
+				3F5A37DE15901A2500E40E58 /* CatalogViewController.h */,
+				3F5A37DF15901A2600E40E58 /* CatalogViewController.m */,
+			);
+			name = Example;
+			sourceTree = "<group>";
+		};
+		3FA19032158F469C002FF989 = {
+			isa = PBXGroup;
+			children = (
+				3FA19047158F469C002FF989 /* VdiskSDKExample */,
+				3FA19040158F469C002FF989 /* Frameworks */,
+				3FA1903E158F469C002FF989 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3FA1903E158F469C002FF989 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3FA1903D158F469C002FF989 /* VdiskSDKExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3FA19040158F469C002FF989 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3FEE178B16537D8800D0D3D7 /* MobileCoreServices.framework */,
+				3FEE178916537D8300D0D3D7 /* SystemConfiguration.framework */,
+				3FEE178716537D7700D0D3D7 /* libz.dylib */,
+				3FEE178516537D7100D0D3D7 /* CFNetwork.framework */,
+				3F1CB4E71598967B00F16CDE /* MediaPlayer.framework */,
+				3F879533159073FF001E5E32 /* AssetsLibrary.framework */,
+				3F6C76A2158F4A280046BDDF /* Security.framework */,
+				3FA19041158F469C002FF989 /* UIKit.framework */,
+				3FA19043158F469C002FF989 /* Foundation.framework */,
+				3FA19045158F469C002FF989 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3FA19047158F469C002FF989 /* VdiskSDKExample */ = {
+			isa = PBXGroup;
+			children = (
+				3FC938161654AD1500EF889F /* VdiskSDK.xcodeproj */,
+				3F5A37D1158F57A800E40E58 /* Example */,
+				3FA19048158F469C002FF989 /* Supporting Files */,
+			);
+			path = VdiskSDKExample;
+			sourceTree = "<group>";
+		};
+		3FA19048158F469C002FF989 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3F2C26EE16995069001C7AFB /* SinaWeibo.bundle */,
+				3F40BE5C159C89350018EE4C /* Images */,
+				3FB1D03815903D22008B34AF /* Xib */,
+				3FA19049158F469C002FF989 /* VdiskSDKExample-Info.plist */,
+				3FA1904A158F469C002FF989 /* InfoPlist.strings */,
+				3FA1904D158F469C002FF989 /* main.m */,
+				3FA1904F158F469C002FF989 /* VdiskSDKExample-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3FB1D0291590395C008B34AF /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				3FB1D03315903AD7008B34AF /* AccountInfoViewController.h */,
+				3FB1D03415903AD7008B34AF /* AccountInfoViewController.m */,
+				3FBA43D116807C4E008F31CD /* RecommendViewController.h */,
+				3FBA43D216807C4F008F31CD /* RecommendViewController.m */,
+				3FB1D03D15904ABD008B34AF /* MetadataViewController.h */,
+				3FB1D03E15904ABD008B34AF /* MetadataViewController.m */,
+				3F87951E1590643E001E5E32 /* UploadFileViewController.h */,
+				3F87951F1590643E001E5E32 /* UploadFileViewController.m */,
+				62592D7615D89ADB009D29B5 /* UploadBigFileViewController.h */,
+				62592D7715D89ADB009D29B5 /* UploadBigFileViewController.m */,
+				3F87953D15916B3C001E5E32 /* LoadFileViewController.h */,
+				3F87953E15916B3C001E5E32 /* LoadFileViewController.m */,
+				62D731071591B7BD000D5353 /* SearchViewController.h */,
+				62D731081591B7BD000D5353 /* SearchViewController.m */,
+				62D7310F1591C18A000D5353 /* SharesViewController.h */,
+				62D731101591C18A000D5353 /* SharesViewController.m */,
+				62D731181591D403000D5353 /* CreateFolderViewController.h */,
+				62D731191591D403000D5353 /* CreateFolderViewController.m */,
+				62D7311D1591DC58000D5353 /* DeleteViewController.h */,
+				62D7311E1591DC58000D5353 /* DeleteViewController.m */,
+				62D731271591E3B2000D5353 /* MoveViewController.h */,
+				62D731281591E3B2000D5353 /* MoveViewController.m */,
+				3FF0F76F1592DBE600FD3DBA /* RevisionsViewController.h */,
+				3FF0F7701592DBE600FD3DBA /* RevisionsViewController.m */,
+				62E470031592CC860072D908 /* RestoreViewController.h */,
+				62E470041592CC860072D908 /* RestoreViewController.m */,
+				3FA349A315986EE2008C4E90 /* ThumbnailsViewController.h */,
+				3FA349A415986EE2008C4E90 /* ThumbnailsViewController.m */,
+				3F40BE4C159C22D60018EE4C /* CopyRefViewController.h */,
+				3F40BE4D159C22D60018EE4C /* CopyRefViewController.m */,
+				62D731221591DFF4000D5353 /* CopyViewController.h */,
+				62D731231591DFF5000D5353 /* CopyViewController.m */,
+				3F40BE52159C3E640018EE4C /* CopyFromCopyRefViewController.h */,
+				3F40BE53159C3E640018EE4C /* CopyFromCopyRefViewController.m */,
+				3F1CB4DB159890B300F16CDE /* MediaFilesViewController.h */,
+				3F1CB4DC159890B300F16CDE /* MediaFilesViewController.m */,
+				3F40BE57159C89210018EE4C /* MediaFilesFromRefViewController.h */,
+				3F40BE58159C89220018EE4C /* MediaFilesFromRefViewController.m */,
+				3FE3BF63165CCD8C00ACD976 /* BlitzViewController.h */,
+				3FE3BF64165CCD8C00ACD976 /* BlitzViewController.m */,
+				3F83CF2F169ACE0A0016D362 /* ShareFileToFriendsViewController.h */,
+				3F83CF30169ACE0A0016D362 /* ShareFileToFriendsViewController.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		3FB1D03815903D22008B34AF /* Xib */ = {
+			isa = PBXGroup;
+			children = (
+				3F83CF31169ACE0A0016D362 /* ShareFileToFriendsViewController.xib */,
+				3FE3BF65165CCD8C00ACD976 /* BlitzViewController.xib */,
+				3F40BE59159C89220018EE4C /* MediaFilesFromRefViewController.xib */,
+				3F40BE54159C3E650018EE4C /* CopyFromCopyRefViewController.xib */,
+				3F40BE4E159C22D60018EE4C /* CopyRefViewController.xib */,
+				3FA349A515986EE2008C4E90 /* ThumbnailsViewController.xib */,
+				3FF0F7731592E74E00FD3DBA /* RevisionsViewController.xib */,
+				3F87953F15916B3C001E5E32 /* LoadFileViewController.xib */,
+				3F8795201590643E001E5E32 /* UploadFileViewController.xib */,
+				62592D7815D89ADB009D29B5 /* UploadBigFileViewController.xib */,
+				3FA19056158F469C002FF989 /* RootViewController.xib */,
+				3FB1D03515903AD7008B34AF /* AccountInfoViewController.xib */,
+				62E470051592CC860072D908 /* RestoreViewController.xib */,
+				62D731111591C18A000D5353 /* SharesViewController.xib */,
+				62D731241591DFF5000D5353 /* CopyViewController.xib */,
+				62D7311A1591D403000D5353 /* CreateFolderViewController.xib */,
+				62D7311F1591DC58000D5353 /* DeleteViewController.xib */,
+				62D731291591E3B3000D5353 /* MoveViewController.xib */,
+				3F1CB4DE159891DD00F16CDE /* MediaFilesViewController.xib */,
+			);
+			name = Xib;
+			sourceTree = "<group>";
+		};
+		3FC938171654AD1500EF889F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3FC9381E1654AD1500EF889F /* libVdiskSDK-iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3FA1903C158F469C002FF989 /* VdiskSDKExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FA1905B158F469C002FF989 /* Build configuration list for PBXNativeTarget "VdiskSDKExample" */;
+			buildPhases = (
+				3FA19039158F469C002FF989 /* Sources */,
+				3FA1903A158F469C002FF989 /* Frameworks */,
+				3FA1903B158F469C002FF989 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VdiskSDKExample;
+			productName = VdiskSDKExample;
+			productReference = 3FA1903D158F469C002FF989 /* VdiskSDKExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3FA19034158F469C002FF989 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 3FA19037158F469C002FF989 /* Build configuration list for PBXProject "VdiskSDKExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3FA19032158F469C002FF989;
+			productRefGroup = 3FA1903E158F469C002FF989 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3FC938171654AD1500EF889F /* Products */;
+					ProjectRef = 3FC938161654AD1500EF889F /* VdiskSDK.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				3FA1903C158F469C002FF989 /* VdiskSDKExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3FC9381E1654AD1500EF889F /* libVdiskSDK-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libVdiskSDK-iOS.a";
+			remoteRef = 3FC9381D1654AD1500EF889F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3FA1903B158F469C002FF989 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FA1904C158F469C002FF989 /* InfoPlist.strings in Resources */,
+				3FA19058158F469C002FF989 /* RootViewController.xib in Resources */,
+				3FB1D03715903AD7008B34AF /* AccountInfoViewController.xib in Resources */,
+				3F8795221590643E001E5E32 /* UploadFileViewController.xib in Resources */,
+				3F87954115916B3C001E5E32 /* LoadFileViewController.xib in Resources */,
+				62D731131591C18A000D5353 /* SharesViewController.xib in Resources */,
+				62D7311C1591D403000D5353 /* CreateFolderViewController.xib in Resources */,
+				62D731211591DC58000D5353 /* DeleteViewController.xib in Resources */,
+				62D731261591DFF5000D5353 /* CopyViewController.xib in Resources */,
+				62D7312B1591E3B3000D5353 /* MoveViewController.xib in Resources */,
+				62E470071592CC860072D908 /* RestoreViewController.xib in Resources */,
+				3FF0F7741592E74E00FD3DBA /* RevisionsViewController.xib in Resources */,
+				3FF0F77815930F5500FD3DBA /* Icon-72.png in Resources */,
+				3FF0F77915930F5500FD3DBA /* Icon.png in Resources */,
+				3FF0F77C15930FE200FD3DBA /* Icon@2x.png in Resources */,
+				3FA349A715986EE2008C4E90 /* ThumbnailsViewController.xib in Resources */,
+				3F1CB4DF159891DD00F16CDE /* MediaFilesViewController.xib in Resources */,
+				3F40BE50159C22D60018EE4C /* CopyRefViewController.xib in Resources */,
+				3F40BE56159C3E650018EE4C /* CopyFromCopyRefViewController.xib in Resources */,
+				3F40BE5B159C89230018EE4C /* MediaFilesFromRefViewController.xib in Resources */,
+				62592D7A15D89ADB009D29B5 /* UploadBigFileViewController.xib in Resources */,
+				3FEE176316537D3200D0D3D7 /* Default-568h@2x.png in Resources */,
+				3FE3BF67165CCD8C00ACD976 /* BlitzViewController.xib in Resources */,
+				3F2C26EF16995069001C7AFB /* SinaWeibo.bundle in Resources */,
+				3F83CF33169ACE0A0016D362 /* ShareFileToFriendsViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3FA19039158F469C002FF989 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FA1904E158F469C002FF989 /* main.m in Sources */,
+				3FA19052158F469C002FF989 /* AppDelegate.m in Sources */,
+				3FA19055158F469C002FF989 /* RootViewController.m in Sources */,
+				3F5A37E015901A2600E40E58 /* CatalogViewController.m in Sources */,
+				3FB1D03615903AD7008B34AF /* AccountInfoViewController.m in Sources */,
+				3FB1D03F15904ABD008B34AF /* MetadataViewController.m in Sources */,
+				3F8795211590643E001E5E32 /* UploadFileViewController.m in Sources */,
+				3F87954015916B3C001E5E32 /* LoadFileViewController.m in Sources */,
+				62D731091591B7BD000D5353 /* SearchViewController.m in Sources */,
+				62D731121591C18A000D5353 /* SharesViewController.m in Sources */,
+				62D7311B1591D403000D5353 /* CreateFolderViewController.m in Sources */,
+				62D731201591DC58000D5353 /* DeleteViewController.m in Sources */,
+				62D731251591DFF5000D5353 /* CopyViewController.m in Sources */,
+				62D7312A1591E3B3000D5353 /* MoveViewController.m in Sources */,
+				62E470061592CC860072D908 /* RestoreViewController.m in Sources */,
+				3FF0F7711592DBE600FD3DBA /* RevisionsViewController.m in Sources */,
+				3FA349A615986EE2008C4E90 /* ThumbnailsViewController.m in Sources */,
+				3F1CB4DD159890B300F16CDE /* MediaFilesViewController.m in Sources */,
+				3F40BE4F159C22D60018EE4C /* CopyRefViewController.m in Sources */,
+				3F40BE55159C3E650018EE4C /* CopyFromCopyRefViewController.m in Sources */,
+				3F40BE5A159C89230018EE4C /* MediaFilesFromRefViewController.m in Sources */,
+				62592D7915D89ADB009D29B5 /* UploadBigFileViewController.m in Sources */,
+				3FE3BF66165CCD8C00ACD976 /* BlitzViewController.m in Sources */,
+				3FBA43D316807C4F008F31CD /* RecommendViewController.m in Sources */,
+				3F83CF32169ACE0A0016D362 /* ShareFileToFriendsViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3FA1904A158F469C002FF989 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3FA1904B158F469C002FF989 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		3FA19056158F469C002FF989 /* RootViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3FA19057158F469C002FF989 /* en */,
+			);
+			name = RootViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3FA19059158F469C002FF989 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../VdiskSDK/VdiskSDK/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-load_all";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3FA1905A158F469C002FF989 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../VdiskSDK/VdiskSDK/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "-load_all";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3FA1905C158F469C002FF989 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VdiskSDKExample/VdiskSDKExample-Prefix.pch";
+				INFOPLIST_FILE = "VdiskSDKExample/VdiskSDKExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WEIBO_APPKEY = "$(kWeiboAppKey)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		3FA1905D158F469C002FF989 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VdiskSDKExample/VdiskSDKExample-Prefix.pch";
+				INFOPLIST_FILE = "VdiskSDKExample/VdiskSDKExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WEIBO_APPKEY = "$(kWeiboAppKey)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3FA19037158F469C002FF989 /* Build configuration list for PBXProject "VdiskSDKExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FA19059158F469C002FF989 /* Debug */,
+				3FA1905A158F469C002FF989 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3FA1905B158F469C002FF989 /* Build configuration list for PBXNativeTarget "VdiskSDKExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FA1905C158F469C002FF989 /* Debug */,
+				3FA1905D158F469C002FF989 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3FA19034158F469C002FF989 /* Project object */;
+}
