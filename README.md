@@ -32,6 +32,55 @@ session.delegate = self;
 [[VdiskSession sharedSession] link];
 ```
 
+实现VdiskSessionDelegate
+
+```objective-c
+
+#pragma mark -
+#pragma mark VdiskSessionDelegate methods
+
+/ * When you use the VdiskSession's request methods,
+ you may receive the following four callbacks. */
+
+//发现已经登录了，不必再次登录
+- (void)sessionAlreadyLinked:(VdiskSession *)session {
+
+    NSLog(@"sessionAlreadyLinked");
+}
+
+// Log in successfully.
+- (void)sessionLinkedSuccess:(VdiskSession *)session {
+
+    NSLog(@"sessionLinkedSuccess: %@", session.userID);
+  
+}
+
+//log fail
+- (void)session:(VdiskSession *)session didFailToLinkWithError:(NSError *)error {
+
+    NSLog(@"didFailToLinkWithError:%@", error);
+}
+
+// Log out successfully.
+- (void)sessionUnlinkedSuccess:(VdiskSession *)session {
+
+    NSLog(@"sessionUnlinkedSuccess");
+}
+
+//调用接口的时候，发现没有登录，会调用此方法
+- (void)sessionNotLink:(VdiskSession *)session {
+
+    NSLog(@"sessionNotLink");
+}
+
+// access_token超过有效期会调用此方法
+- (void)sessionExpired:(VdiskSession *)session {
+    
+    NSLog(@"sessionExpired");
+   // [session refreshLink];
+}
+```
+
 =============
 
 上传文件
