@@ -1,5 +1,12 @@
 VdiskSDK-iOS
 ============
+RESTful API文档地址:
+http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
+============
+
+包含头文件: VdiskSDK.h
+
+============
 
 ```objective-c
 
