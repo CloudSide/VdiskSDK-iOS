@@ -2,6 +2,7 @@ VdiskSDK-iOS
 ============
 RESTful API文档地址:
 http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
+--------------------------------------------------------------------
 ============
 
 包含头文件: `#import "VdiskSDK.h"`
@@ -88,7 +89,7 @@ if (![[VdiskSession sharedSession] isLinked]) {
 上传文件
 --------
 
-. 实例化VdiskRestClient
+- 实例化VdiskRestClient
 
 ```objective-c
 
@@ -97,14 +98,14 @@ _vdiskRestClient.delegate = self;
 
 ```
 
-. 调用上传方法
+- 调用上传方法
 
 ```objective-c
 
 [_vdiskRestClient uploadFile:@"要保存的文件名" toPath:@"目标路径(不含文件名)" withParentRev:nil fromPath:@"本地文件全路径"];
 
 ```
-. 实现Delegate
+- 实现Delegate
 
 ```objective-c
 
