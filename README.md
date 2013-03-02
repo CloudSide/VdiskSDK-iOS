@@ -20,17 +20,15 @@ session.delegate = self;
 
 ```
 
-判断是否已登录
+判断是否已登录, 如果没有，则授权并登录
 
 ```objective-c
-[[VdiskSession sharedSession] isLinked];
+if (![[VdiskSession sharedSession] isLinked]) {
+
+ [[VdiskSession sharedSession] link];
+}
 ```
 
-授权并登录
-
-```objective-c
-[[VdiskSession sharedSession] link];
-```
 
 实现VdiskSessionDelegate
 
@@ -39,7 +37,7 @@ session.delegate = self;
 #pragma mark -
 #pragma mark VdiskSessionDelegate methods
 
-/ * When you use the VdiskSession's request methods,
+/* When you use the VdiskSession's request methods,
  you may receive the following four callbacks. */
 
 //发现已经登录了，不必再次登录
