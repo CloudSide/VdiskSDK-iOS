@@ -29,7 +29,7 @@ session.delegate = self;
 ```objective-c
 if (![[VdiskSession sharedSession] isLinked]) {
 
- [[VdiskSession sharedSession] link];
+    [[VdiskSession sharedSession] link];
 }
 ```
 
