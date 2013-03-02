@@ -4,11 +4,12 @@ RESTful API文档地址:
 http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
 ============
 
-包含头文件: VdiskSDK.h
+包含头文件: `#import "VdiskSDK.h"`
 
 ============
 
 实例化VdiskSession
+-------------------
 
 ```objective-c
 
@@ -20,7 +21,9 @@ session.delegate = self;
 
 ```
 
+======================================
 判断是否已登录, 如果没有，则授权并登录
+--------------------------------------
 
 ```objective-c
 if (![[VdiskSession sharedSession] isLinked]) {
@@ -31,6 +34,7 @@ if (![[VdiskSession sharedSession] isLinked]) {
 
 
 实现VdiskSessionDelegate
+------------------------
 
 ```objective-c
 
@@ -82,6 +86,7 @@ if (![[VdiskSession sharedSession] isLinked]) {
 =============
 
 上传文件
+--------
 
 . 实例化VdiskRestClient
 
