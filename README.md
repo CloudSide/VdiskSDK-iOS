@@ -21,7 +21,9 @@ Usage
 
 ```objective-c
 
-VdiskSession *session = [[VdiskSession alloc] initWithAppKey:@"你的微盘AppKey" appSecret:@"你的微盘AppSecret" appRoot:@"sandbox"];
+VdiskSession *session = [[VdiskSession alloc] initWithAppKey:@"你的微盘AppKey" 
+                                                   appSecret:@"你的微盘AppSecret" 
+                                                     appRoot:@"sandbox"];
 session.delegate = self;
 [session setRedirectURI:@"http://OAuth2回调地址"];
 [VdiskSession setSharedSession:[session autorelease]];
@@ -108,9 +110,10 @@ _vdiskRestClient.delegate = self;
 - 调用上传方法
 
 ```objective-c
-
-[_vdiskRestClient uploadFile:@"要保存的文件名" toPath:@"目标路径(不含文件名)" withParentRev:nil fromPath:@"本地文件全路径"];
-
+[_vdiskRestClient uploadFile:@"要保存的文件名" 
+                      toPath:@"目标路径(不含文件名)" 
+               withParentRev:nil 
+                    fromPath:@"本地文件全路径"];
 ```
 - 实现上传相关的VdiskRestClientDelegate
 
