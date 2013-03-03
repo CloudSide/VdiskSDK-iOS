@@ -47,7 +47,7 @@ if (![[VdiskSession sharedSession] isLinked]) {
 #pragma mark VdiskSessionDelegate methods
 
 /* When you use the VdiskSession's request methods,
- you may receive the following four callbacks. */
+ you may receive the following 7 callbacks. */
 
 //发现已经登录了，不必再次登录
 - (void)sessionAlreadyLinked:(VdiskSession *)session {
@@ -160,5 +160,45 @@ _vdiskRestClient.delegate = self;
 
 ```
 
+- 获得文件信息、文件列表
+------------------------
 
+- - (void)[VdiskRestClient loadMetadata]
 
+```objective-c
+[_restClient loadMetadata:@"/path/to/folder"]; //获得目录信息
+[_restClient loadMetadata:@"/path/to/file"];   //获得文件信息
+```
+
+- 实现VdiskRestClientDelegate
+
+```objective-c
+#pragma mark - VdiskRestClientDelegate
+
+- (void)restClient:(VdiskRestClient *)client loadedMetadata:(VdiskMetadata *)metadata {
+    
+    NSLog(@"path:%@", metadata.path);
+    NSLog(@"filename:%@", metadata.filename);
+
+    if ([metadata isDirectory]) {
+
+        self.listData = metadata.contents;
+        [self.tableView reloadData];
+        
+    } else {
+    
+        NSLog(@"humanReadableSize:%@", metadata.humanReadableSize);
+        NSLog(@"totalBytes:%@", metadata.totalBytes);
+    }  
+}
+
+- (void)restClient:(VdiskRestClient *)client metadataUnchangedAtPath:(NSString *)path {
+    
+    [self.tableView reloadData];
+}
+
+- (void)restClient:(VdiskRestClient *)client loadMetadataFailedWithError:(NSError *)error {
+    
+    NSLog(@"%@", error);
+}
+```
