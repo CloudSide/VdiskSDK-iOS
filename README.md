@@ -1,6 +1,7 @@
-VdiskSDK-iOS
+[![](http://vdisk.me/static/images/vi/logo/32x32.png)](#) VdiskSDK-iOS
 ============
-RESTful API文档地址:
+RESTful API文档:
+[![](http://vdisk.me/static/images/vi/icon/16x16.png)](http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc)
 http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
 
 
