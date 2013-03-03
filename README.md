@@ -149,7 +149,14 @@ _vdiskRestClient.delegate = self;
 //处理上传失败后的工作
 - (void)restClient:(VdiskRestClient *)client uploadFileFailedWithError:(NSError *)error {
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" 
+                                                        message:[NSString stringWithFormat:@"Error!\nerrno:%d\n%@\%@\n", 
+                                                                                           error.code, 
+                                                                                           error.localizedDescription, 
+                                                                                           [error userInfo]] 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"Okay" 
+                                              otherButtonTitles:nil];
     
     [alertView show];
     [alertView release];
