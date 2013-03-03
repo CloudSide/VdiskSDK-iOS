@@ -43,9 +43,6 @@ VdiskRequestDelegate> {
     NSString    *_appSecret;
     NSString    *_redirectURI;
     VdiskRequest   *_request;
-#if TARGET_OS_IPHONE
-    UIViewController *_rootViewController;
-#endif
     id<VdiskAuthorizeDelegate> _delegate;
     NSString *_udid;
 }
@@ -55,9 +52,6 @@ VdiskRequestDelegate> {
 @property (nonatomic, retain) NSString *appSecret;
 @property (nonatomic, retain) NSString *redirectURI;
 @property (nonatomic, retain) VdiskRequest *request;
-#if TARGET_OS_IPHONE
-@property (nonatomic, assign) UIViewController *rootViewController;
-#endif
 @property (nonatomic, assign) id<VdiskAuthorizeDelegate> delegate;
 
 - (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret udid:(NSString *)udid;

@@ -76,8 +76,6 @@
 }
 
 - (IBAction)onLinkButtionPressed {
-
-    [[VdiskSession sharedSession] setRootViewController:self];
     
     if (_switcher.isOn) {
     

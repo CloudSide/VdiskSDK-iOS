@@ -25,12 +25,6 @@
 
 @interface VdiskAuthorize (Private)
 
-#if TARGET_OS_IPHONE
-
-- (void)dismissModalViewController;
-
-#endif
-
 - (void)requestAccessTokenWithAuthorizeCode:(NSString *)code;
 - (void)requestAccessTokenWithUsername:(NSString *)username password:(NSString *)password;
 
@@ -42,9 +36,6 @@
 @synthesize appSecret = _appSecret;
 @synthesize redirectURI = _redirectURI;
 @synthesize request = _request;
-#if TARGET_OS_IPHONE
-@synthesize rootViewController = _rootViewController;
-#endif
 @synthesize delegate = _delegate;
 @synthesize udid = _udid;
 
@@ -74,25 +65,10 @@
     [_request disconnect];
     [_request release], _request = nil;
     
-#if TARGET_OS_IPHONE    
-    _rootViewController = nil;
-#endif
     _delegate = nil;
 
     [super dealloc];
 }
-
-#if TARGET_OS_IPHONE 
-
-#pragma mark - VdiskAuthorize Private Methods
-
-- (void)dismissModalViewController {
-   
-    [_rootViewController dismissModalViewControllerAnimated:YES];
-}
-
-#endif
-
 
 - (void)requestAccessTokenWithAuthorizeCode:(NSString *)code {
     

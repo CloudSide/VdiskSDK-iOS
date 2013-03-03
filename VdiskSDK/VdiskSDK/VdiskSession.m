@@ -49,9 +49,6 @@ static VdiskSession *kVdiskSharedSession = nil;
 @synthesize authorize = _authorize;
 @synthesize sinaWeibo = _sinaWeibo;
 @synthesize delegate = _delegate;
-#if TARGET_OS_IPHONE
-@synthesize rootViewController = _rootViewController;
-#endif
 @synthesize appRoot = _appRoot;
 @synthesize sessionType = _sessionType;
 //@synthesize weiboAccessToken = _weiboAccessToken;
@@ -245,12 +242,7 @@ static VdiskSession *kVdiskSharedSession = nil;
     [_sinaWeibo release], _sinaWeibo = nil;
     
     _delegate = nil;
-#if TARGET_OS_IPHONE
-    _rootViewController = nil;
-#endif
-    
-    //[_weiboAccessToken release], _weiboAccessToken = nil;
-    
+
     [_udid release], _udid = nil;
     
     [super dealloc];
@@ -427,9 +419,6 @@ static VdiskSession *kVdiskSharedSession = nil;
         }
         
         VdiskAuthorize *auth = [[VdiskAuthorize alloc] initWithAppKey:_appKey appSecret:_appSecret udid:self.udid];
-#if TARGET_OS_IPHONE
-        [auth setRootViewController:_rootViewController];
-#endif
         [auth setDelegate:self];
         self.authorize = auth;
         [auth release];
@@ -489,9 +478,6 @@ static VdiskSession *kVdiskSharedSession = nil;
     }
     
     VdiskAuthorize *auth = [[VdiskAuthorize alloc] initWithAppKey:_appKey appSecret:_appSecret udid:self.udid];
-#if TARGET_OS_IPHONE    
-    [auth setRootViewController:_rootViewController];
-#endif
     [auth setDelegate:self];
     self.authorize = auth;
     [auth release];

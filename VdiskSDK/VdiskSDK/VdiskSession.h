@@ -86,9 +86,6 @@ typedef enum {
     VdiskAuthorize *_authorize;
     SinaWeibo *_sinaWeibo;
     id<VdiskSessionDelegate> _delegate;
-#if TARGET_OS_IPHONE
-    UIViewController *_rootViewController;
-#endif
     
     VdiskSessionType _sessionType;
     
@@ -114,10 +111,6 @@ typedef enum {
 @property (nonatomic, retain) VdiskAuthorize *authorize;
 @property (nonatomic, retain) SinaWeibo *sinaWeibo;
 @property (nonatomic, assign) id<VdiskSessionDelegate> delegate;
-#if TARGET_OS_IPHONE
-@property (nonatomic, assign) UIViewController *rootViewController;
-#endif
-//@property (nonatomic, retain) NSString *weiboAccessToken;
 
 
 // Initialize an instance with the AppKey and the AppSecret you have for your client.
