@@ -116,41 +116,11 @@ static CLogReport *kSharedLogReport = nil;
         
         if ([fileManager fileExistsAtPath:_logsDirectory] && ![_request isExecuting]) {
             
-            
-            //long expires = time((time_t *)NULL) + 3600 * 24;
+            /*
             long expires = time((time_t *)NULL) + 3600;
             
             NSString *expiresString = [NSString stringWithFormat:@"%ld", expires];
             
-            /*
-             NSMutableDictionary *xVdiskHeaders = [[NSMutableDictionary alloc] init];
-             
-             for (NSString *keyString in [[_request requestHeaders] allKeys]) {
-             
-             NSString *lowerKeyString = [keyString lowercaseString];
-             
-             if ([lowerKeyString rangeOfString:@"x-vdisk-"].location != NSNotFound) {
-             
-             [xVdiskHeaders setValue:[[_request requestHeaders] objectForKey:keyString] forKey:lowerKeyString];
-             }
-             }
-             
-             
-             NSArray *xVdiskHeadersKeySortStrings = [[xVdiskHeaders allKeys] sortedArrayUsingSelector:@selector(compare:)];
-             
-             NSMutableArray *xVdiskSortedHeaders = [[NSMutableArray alloc] init];
-             
-             for (NSString *lowerKeyString in xVdiskHeadersKeySortStrings) {
-             
-             [xVdiskSortedHeaders addObject:[NSString stringWithFormat:@"%@:%@", lowerKeyString, [xVdiskHeaders objectForKey:lowerKeyString]]];
-             }
-             
-             [xVdiskHeaders release];
-             
-             NSString *xVdiskHeadersString = [xVdiskSortedHeaders componentsJoinedByString:@"\n"];
-             
-             [xVdiskSortedHeaders release];
-             */
             
             NSString *xVdiskHeadersString = [NSString stringWithFormat:@"x-vdisk-device-uuid:%@", [VdiskSession sharedSession].udid];
             
@@ -173,11 +143,12 @@ static CLogReport *kSharedLogReport = nil;
             
             NSString *queryPrefix = parsedURL.query ? @"&" : @"?";
             NSString *urlString = [NSString stringWithFormat:@"%@%@app_key=%@&expire=%@&ssig=%@", _reportURL, queryPrefix, [VdiskSession sharedSession].appKey, expiresString, sign];
+             */
             
             
             [_request release], _request = nil;
             
-            _request = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithString:urlString]]];
+            _request = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:_reportURL]];
             _request.delegate = self;
             [_request setNumberOfTimesToRetryOnTimeout:3];
             [_request addRequestHeader:@"x-vdisk-device-uuid" value:[VdiskSession sharedSession].udid];
@@ -188,6 +159,7 @@ static CLogReport *kSharedLogReport = nil;
             [_request setRequestMethod:@"POST"];
             [_request setShouldAttemptPersistentConnection:YES];
             [_request setTimeOutSeconds:60];
+            [VdiskRestClient signRequest:_request];
             //[_request addRequestHeader:@"Host" value:@"content.vdisk.me"];
             
             NSArray *tempArray = [fileManager contentsOfDirectoryAtPath:_logsDirectory error:nil];

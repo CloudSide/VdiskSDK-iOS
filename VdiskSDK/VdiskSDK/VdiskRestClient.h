@@ -169,6 +169,7 @@ typedef enum {
 - (NSUInteger)requestCount;
 
 + (NSString *)humanReadableSize:(unsigned long long)length;
++ (void)signRequest:(ASIHTTPRequest *)request;
 
 @property (nonatomic, assign) id<VdiskRestClientDelegate> delegate;
 

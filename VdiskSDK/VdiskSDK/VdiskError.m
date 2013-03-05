@@ -296,6 +296,9 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
         case 21331:
             message = @"系统繁忙，请稍后再试(21331)";
             break;
+        case 21332:
+            message = @"登录超时, 请重新登录(21332)";
+            break;
         case 21334:
             message = @"账号异常, 请先解除异常(21334)";
             break;

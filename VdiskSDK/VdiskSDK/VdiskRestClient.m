@@ -2271,6 +2271,7 @@
     }
     
     [mutableParams setValue:cpRef forKey:@"copy_ref"];
+    [mutableParams setValue:@"signRequest" forKey:@"x-vdisk-local-userinfo"];
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
     
@@ -2711,6 +2712,61 @@
 
 #pragma mark private methods
 
++ (void)signRequest:(ASIHTTPRequest *)request {
+
+    NSMutableDictionary *xVdiskHeaders = [[NSMutableDictionary alloc] init];
+    
+    for (NSString *keyString in [[request requestHeaders] allKeys]) {
+        
+        NSString *lowerKeyString = [keyString lowercaseString];
+        
+        if ([lowerKeyString rangeOfString:@"x-vdisk-"].location != NSNotFound) {
+            
+            [xVdiskHeaders setValue:[[request requestHeaders] objectForKey:keyString] forKey:lowerKeyString];
+        }
+    }
+    
+    NSArray *xVdiskHeadersKeySortStrings = [[xVdiskHeaders allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSMutableArray *xVdiskSortedHeaders = [[NSMutableArray alloc] init];
+    
+    for (NSString *lowerKeyString in xVdiskHeadersKeySortStrings) {
+        
+        [xVdiskSortedHeaders addObject:[NSString stringWithFormat:@"%@:%@", lowerKeyString, [xVdiskHeaders objectForKey:lowerKeyString]]];
+    }
+    
+    [xVdiskHeaders release];
+    
+    NSString *xVdiskHeadersString = [xVdiskSortedHeaders componentsJoinedByString:@"\n"];
+    
+    [xVdiskSortedHeaders release];
+    
+    
+    NSURL *parsedURL = request.url;
+    
+    NSString *destURI = nil;
+    
+    if (parsedURL.query) {
+        
+        destURI = [NSString stringWithFormat:@"%@?%@", [parsedURL path], parsedURL.query];
+        
+    } else {
+        
+        destURI = [NSString stringWithString:[parsedURL path]];
+    }
+    
+    long expires = time((time_t *)NULL) + 3600;
+    NSString *expiresString = [NSString stringWithFormat:@"%ld", expires];
+    
+    NSString *stringToSign = [NSString stringWithFormat:@"%@\n\n%@\n%@\n%@", request.requestMethod, expiresString, xVdiskHeadersString, destURI];
+    
+    NSString *sign = [[[[stringToSign HMACSHA1EncodedDataWithKey:[VdiskSession sharedSession].appSecret] base64EncodedString] substringWithRange:NSMakeRange(5, 10)] URLEncodedString];
+    
+    NSString *queryPrefix = parsedURL.query ? @"&" : @"?";
+    NSString *urlString = [NSString stringWithFormat:@"%@%@app_key=%@&expire=%@&ssig=%@", parsedURL.absoluteString, queryPrefix, [VdiskSession sharedSession].appKey, expiresString, sign];
+    [request setURL:[NSURL URLWithString:urlString]];
+}
+
 + (NSString *)humanReadableSize:(unsigned long long)length {
 	
 	NSArray *filesizename = [NSArray arrayWithObjects:@" Bytes", @" KB", @" MB", @" GB", @" TB", @" PB", @" EB", @" ZB", @" YB", nil];
@@ -2759,7 +2815,9 @@
 
 - (ASIFormDataRequest *)requestWithHost:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params method:(NSString *)method {
     
-    if (![self checkSessionStatus]) {
+    BOOL needSign = params != nil && [params objectForKey:@"x-vdisk-local-userinfo"] && [[params objectForKey:@"x-vdisk-local-userinfo"] isEqualToString:@"signRequest"];
+    
+    if (![self checkSessionStatus] && !needSign) {
         
         ASIFormDataRequest *requset = [ASIFormDataRequest requestWithURL:nil];
         
@@ -2794,7 +2852,15 @@
     
     VdiskRequest *request;
     
-    if (_session.sessionType == kVdiskSessionTypeWeiboAccessToken) {
+    if (needSign) {
+        
+        request = [VdiskRequest requestWithURL:urlString httpMethod:method params:params httpHeaderFields:nil udid:_session.udid delegate:nil];
+        ASIFormDataRequest *finalRequest = [request finalRequest];
+        [VdiskRestClient signRequest:finalRequest];
+        
+        return finalRequest;
+        
+    } else if (_session.sessionType == kVdiskSessionTypeWeiboAccessToken) {
                 
         NSDictionary *requestHeaders = [self requestHeadersWithWeiboAccessTokenAuthorization];
         

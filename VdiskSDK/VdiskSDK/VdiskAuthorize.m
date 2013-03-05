@@ -207,7 +207,7 @@
 
 - (void)request:(VdiskRequest *)theRequest didFinishLoadingWithResult:(id)result {
     
-    //NSLog(@"%@", result);
+    NSLog(@"%@", result);
     
     BOOL success = NO;
     

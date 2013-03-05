@@ -366,6 +366,13 @@
 - (BOOL)webView:(UIWebView *)aWebView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     
+    if ([request.URL.absoluteString rangeOfString:@"thebox.sinaapp.com/weibo/reg.php"].location != NSNotFound) {
+        
+        [[UIApplication sharedApplication] openURL:request.URL];
+        
+        return NO;
+    }
+    
     //NSLog(@"%@", [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease]);
     
     

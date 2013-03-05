@@ -107,7 +107,8 @@ typedef enum {
 #define kVdiskLogsReportURL                     @"http://content.vdisk.me/2/report/new"             //@"http://test.php.vdisk.me/2/report/new"
 
 #define kVdiskSDKVersion                        @"1.1.1"                                            //TODO: parameterize from build system
-#define kVdiskAPIHost                           @"openapi.vdisk.me"                                 //@"19.vdiskapi.appsina.com" /* [Cloud Mario] ... */
+#define kVdiskAPIHost                           @"openapi.vdisk.me"                                 
+//#define kVdiskAPIHost                           @"20.vdiskapi.appsina.com"                          /* [Cloud Mario] ... */
 #define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn:4443"
 #define kVdiskAPIContentHost                    @"upload.openapi.vdisk.me"
 #define kVdiskAPIVersion                        @"2"
