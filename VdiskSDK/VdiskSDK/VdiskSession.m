@@ -618,8 +618,8 @@ static VdiskSession *kVdiskSharedSession = nil;
     
     VdiskRestClient *restClient = [[VdiskRestClient alloc] initWithSession:self];
     restClient.delegate = self;
-    //[restClient loadAccountInfo];
-    [restClient performSelector:@selector(loadAccountInfo) withObject:nil afterDelay:0.01];
+    [restClient loadAccountInfo];
+    //[restClient performSelector:@selector(loadAccountInfo) withObject:nil afterDelay:0.01];
 }
 
 - (void)authorize:(VdiskAuthorize *)authorize didFailWithError:(NSError *)error {
