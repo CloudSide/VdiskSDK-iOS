@@ -101,7 +101,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"请求超时, 请重试";
             break;
         case 3:
-            message = @"认证失败, 请重新登录";
+            message = @"认证失败, 正在重新登录";
             break;
         case 4:
             message = @"网络请求已经取消";
@@ -144,7 +144,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"服务器错误(1004)";
             break;
         case 1005:
-            message = @"登录超时, 请重新登陆.";
+            message = @"登录超时, 正在重新登陆.";
             break;
         case 1006:
             message = @"文件下载不完整(1006)";
@@ -314,13 +314,13 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"目标路径不存在.";
             break;
         case 40101:
-            message = @"认证失败, 请重新登录(40101)";
+            message = @"认证失败, 正在重新登录(40101)";
             break;
         case 40102:
-            message = @"认证失败, 请重新登录(40102)";
+            message = @"认证失败, 正在重新登录(40102)";
             break;
         case 40103:
-            message = @"认证失败, 请重新登录(40103)";
+            message = @"认证失败, 正在重新登录(40103)";
             break;
         case 40301:
             message = @"禁止访问. 没有足够的访问权限.";
