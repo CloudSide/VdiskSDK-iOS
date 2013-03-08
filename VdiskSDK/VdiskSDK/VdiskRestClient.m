@@ -2815,10 +2815,11 @@
 
 - (ASIFormDataRequest *)requestWithHost:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params method:(NSString *)method {
     
-    BOOL needSign = params != nil && [params objectForKey:@"x-vdisk-local-userinfo"] && [[params objectForKey:@"x-vdisk-local-userinfo"] isEqualToString:@"signRequest"];
+    BOOL needSign = ![_session isLinked] && params != nil && [params objectForKey:@"x-vdisk-local-userinfo"] && [[params objectForKey:@"x-vdisk-local-userinfo"] isEqualToString:@"signRequest"];
     
     if (![self checkSessionStatus] && !needSign) {
         
+        /*
         ASIFormDataRequest *requset = [ASIFormDataRequest requestWithURL:nil];
         
         NSInteger errorCode = kVdiskErrorSessionError;
@@ -2828,6 +2829,8 @@
         VdiskLogWarning(@"VdiskSDK: Access Token Validation Failed / Access Token Expired / Access Token Empty");
         
         return requset;
+         */
+
     }
     
     NSString *escapedPath = [VdiskRestClient escapePath:path];
