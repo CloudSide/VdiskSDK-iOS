@@ -567,7 +567,8 @@
         {
             ssoLoggingIn = NO;
             
-            if ([SinaWeiboRequest getParamValueFromUrl:urlString paramName:@"sso_error_user_cancelled"])
+            if ([SinaWeiboRequest getParamValueFromUrl:urlString paramName:@"sso_error_user_cancelled"] ||
+                [urlString rangeOfString:@"failed=t"].location != NSNotFound)
             {
                 [[VdiskSession sharedSession] authorizeDidCancel:nil];
                 
