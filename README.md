@@ -178,7 +178,7 @@ _vdiskRestClient.delegate = self;
 - 获得文件信息、文件列表
 ------------------------
 
-- - (void)[VdiskRestClient loadMetadata]
+- - [VdiskRestClient loadMetadata:(NSString *)path]
 
 ```objective-c
 [_restClient loadMetadata:@"/path/to/folder"]; //获得目录信息
