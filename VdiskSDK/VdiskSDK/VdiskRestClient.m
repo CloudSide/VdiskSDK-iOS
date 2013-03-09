@@ -1000,6 +1000,14 @@
     
     if (![self checkSessionStatus]) {
         
+        if (![_session isLinked]) {
+            
+            NSString *errorMsg = @"VdiskSDK: Access Token Empty";
+            VdiskLogWarning(@"VdiskSDK: %@ (%@)", errorMsg, sourcePath);
+            
+            return;
+        }
+        
         /*
         
         NSString *destPath = [path stringByAppendingPathComponent:filename];
@@ -2823,7 +2831,16 @@
     
     if (![self checkSessionStatus] && !needSign) {
         
+        if (![_session isLinked]) {
+            
+            NSString *errorMsg = @"VdiskSDK: Access Token Empty";
+            VdiskLogWarning(@"VdiskSDK: %@ (%@)", errorMsg, path);
+            
+            return nil;
+        }
+        
         /*
+         
         ASIFormDataRequest *requset = [ASIFormDataRequest requestWithURL:nil];
         
         NSInteger errorCode = kVdiskErrorSessionError;
@@ -2833,6 +2850,7 @@
         VdiskLogWarning(@"VdiskSDK: Access Token Validation Failed / Access Token Expired / Access Token Empty");
         
         return requset;
+         
          */
 
     }
@@ -2891,16 +2909,36 @@
          (request.error.code == ASIAuthenticationErrorType &&
           [request.error.domain isEqual:NetworkRequestErrorDomain]))) {
         
-        VdiskLogWarning(@"VdiskSDK: Access Token Validation Failed / Access Token Expired");
+             
+             VdiskLogWarning(@"VdiskSDK: Access Token Validation Failed / Access Token Expired");
         
-        if ([_session.delegate respondsToSelector:@selector(sessionExpired:)]) {
-            
-            [_session.delegate sessionExpired:_session];
-            
-        } else if ([_session.delegate respondsToSelector:@selector(sessionNotLink:)]) {
-            
-            [_session.delegate sessionNotLink:_session];
-        }
+             if (![_session isLinked]) {
+                 
+                 if ([_session.delegate respondsToSelector:@selector(sessionNotLink:)]) {
+                     
+                     [_session.delegate sessionNotLink:_session];
+                 }
+                 
+             } else {
+             
+                 if ([_session.delegate respondsToSelector:@selector(sessionExpired:)]) {
+                     
+                     [_session.delegate sessionExpired:_session];
+                 }
+             }
+             
+             /*
+             
+             if ([_session.delegate respondsToSelector:@selector(sessionExpired:)]) {
+                 
+                 [_session.delegate sessionExpired:_session];
+                 
+             } else if ([_session.delegate respondsToSelector:@selector(sessionNotLink:)]) {
+                 
+                 [_session.delegate sessionNotLink:_session];
+             }
+              
+              */
     }
 }
 
