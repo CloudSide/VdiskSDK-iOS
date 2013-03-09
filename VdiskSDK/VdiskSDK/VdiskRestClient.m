@@ -1000,6 +1000,8 @@
     
     if (![self checkSessionStatus]) {
         
+        /*
+        
         NSString *destPath = [path stringByAppendingPathComponent:filename];
         NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                   sourcePath, @"sourcePath",
@@ -1019,6 +1021,8 @@
         }
         
         return;
+         
+         */
     }
     
     
