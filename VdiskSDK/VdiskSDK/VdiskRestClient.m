@@ -2174,6 +2174,9 @@
         case kVdiskShareListTypeShareList:
             apiName = kVdiskShareListShareList;
             break;
+        case kVdiskShareListTypeShareListAll:
+            apiName = kVdiskShareListShareListAll;
+            break;
         case kVdiskShareListTypeShareSearch:
             apiName = kVdiskShareListShareSearch;
             break;

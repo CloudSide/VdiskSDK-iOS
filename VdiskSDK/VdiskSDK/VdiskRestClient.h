@@ -25,6 +25,7 @@ typedef enum {
     kVdiskShareListTypeRecommendListForUser     =   0,
     kVdiskShareListTypeRecommendListForFile,
     kVdiskShareListTypeShareList,
+    kVdiskShareListTypeShareListAll,
     kVdiskShareListTypeShareSearch,
     
 } VdiskShareListType;

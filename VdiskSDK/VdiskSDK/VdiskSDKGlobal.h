@@ -100,6 +100,7 @@ typedef enum {
 #define kVdiskShareListRecommendListForUser     @"/recommend/list_for_user"
 #define kVdiskShareListRecommendListForFile     @"/recommend/list_for_file"
 #define kVdiskShareListShareList                @"/share/list"
+#define kVdiskShareListShareListAll             @"/share/list_all"
 #define kVdiskShareListShareSearch              @"/share/search"
 
 #define kVdiskAuthorizeURL                      @"https://auth.sina.com.cn/oauth2/authorize"
