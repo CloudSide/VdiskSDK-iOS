@@ -98,9 +98,9 @@
     
 #if TARGET_OS_IPHONE
     
-    //NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:_appKey, @"client_id", @"code", @"response_type", _redirectURI, @"redirect_uri", @"mobile", @"display", @"true", @"forcelogin", nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:_appKey, @"client_id", @"code", @"response_type", _redirectURI, @"redirect_uri", @"mobile", @"display", @"true", @"forcelogin", nil];
     
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:_appKey, @"client_id", @"code", @"response_type", _redirectURI, @"redirect_uri", @"mobile", @"display", nil];
+    //NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:_appKey, @"client_id", @"code", @"response_type", _redirectURI, @"redirect_uri", @"mobile", @"display", nil];
     
     NSString *urlString = [VdiskRequest serializeURL:kVdiskAuthorizeURL params:params httpMethod:@"GET"];
     
