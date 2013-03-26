@@ -169,7 +169,7 @@ static VdiskSession *kVdiskSharedSession = nil;
     [fileLogger setLogFormatter:formatter];
     
     fileLogger.maximumFileSize  = 1024 * 1024;
-    fileLogger.rollingFrequency =   60 * 60 * 4;
+    fileLogger.rollingFrequency =   60 * 60 * 3;
     fileLogger.logFileManager.maximumNumberOfLogFiles = 5;
     
     [DDLog addLogger:fileLogger];
@@ -252,11 +252,11 @@ static VdiskSession *kVdiskSharedSession = nil;
 
     if (_udid == nil) {
         
-        _udid = [[NSUserDefaults standardUserDefaults] stringForKey:kGUIDKeyName];
+        _udid = [[[NSUserDefaults standardUserDefaults] stringForKey:kGUIDKeyName] retain];
         
         if (_udid == nil) {
             
-            _udid = [NSString GUIDString];
+            _udid = [[NSString GUIDString] retain];
             
             [[NSUserDefaults standardUserDefaults] setObject:_udid forKey:kGUIDKeyName];
             [[NSUserDefaults standardUserDefaults] synchronize];

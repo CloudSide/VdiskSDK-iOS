@@ -161,7 +161,7 @@
     [_containerView setFrame:CGRectMake(10, 10, _panelView.frame.size.width - 20.0f, _panelView.frame.size.height - 20.0f)];
     [_webView setFrame:CGRectMake(0, 0, _containerView.frame.size.width, _containerView.frame.size.height)];
     
-    _closeButton.frame = CGRectMake(2, 2, 29, 29);
+    _closeButton.frame = CGRectMake(_containerView.frame.size.width - 8, 2, 29, 29);
 }
 
 - (void)sizeToFitOrientation:(UIInterfaceOrientation)orientation {
