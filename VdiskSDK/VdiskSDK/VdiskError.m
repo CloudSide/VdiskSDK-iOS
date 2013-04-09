@@ -388,6 +388,9 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
         case 40411:
             message = @"没有可用的在线阅读文件.";
             break;
+        case 40412:
+            message = @"没有此页.";
+            break;
         case 40601:
             message = @"该目录中目录数已达上限.";
             break;
