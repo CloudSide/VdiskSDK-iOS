@@ -38,12 +38,29 @@
     NSString *_fileSha1;
     NSString *_extInfo;
     NSMutableDictionary *_userinfo;
+    
+    /* need_ext */
+    
+    NSString *_shareStatus; //private, public, forbidden
+    NSString *_readURL;
+    NSString *_videoMP4URL;
+    NSString *_audioMP3URL;
+    NSString *_readThumbnail;
+    NSString *_videoThumbnail;
 }
 
 + (NSDateFormatter *)dateFormatter;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionaryValue;
+
+- (BOOL)existsReadURL;
+- (BOOL)existsVideoMP4URL;
+- (BOOL)existsAudioMP3URL;
+- (BOOL)existsReadThumbnail;
+- (BOOL)existsVideoThumbnail;
+
+
 
 @property (nonatomic, readonly) BOOL thumbnailExists;
 @property (nonatomic, readonly) long long totalBytes;
@@ -64,5 +81,16 @@
 @property (nonatomic, readonly) NSString *fileSha1;
 @property (nonatomic, readonly) NSString *extInfo;
 @property (nonatomic, readonly) NSMutableDictionary *userinfo;
+
+
+/* need_ext */
+
+@property (nonatomic, readonly) NSString *shareStatus; //private, public, forbidden
+@property (nonatomic, readonly) NSString *readURL;
+@property (nonatomic, readonly) NSString *videoMP4URL;
+@property (nonatomic, readonly) NSString *audioMP3URL;
+@property (nonatomic, readonly) NSString *readThumbnail;
+@property (nonatomic, readonly) NSString *videoThumbnail;
+
 
 @end

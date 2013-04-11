@@ -67,6 +67,8 @@ typedef enum {
 /* This will load the metadata of a file at a given rev */
 - (void)loadMetadata:(NSString *)path atRev:(NSString *)rev;
 
+- (void)loadMetadata:(NSString *)path withParams:(NSDictionary *)params;
+
 /* Loads a list of files (represented as VdiskDeltaEntry objects) that have changed since the cursor was generated */
 - (void)loadDelta:(NSString *)cursor;
 
@@ -142,8 +144,10 @@ typedef enum {
 - (void)loadSharableLinkForFile:(NSString *)path;
 
 - (void)loadStreamableURLForFile:(NSString *)path;
+- (void)loadStreamableURLForFile:(NSString *)path params:(NSDictionary *)params;
 
 - (void)loadStreamableURLFromRef:(NSString *)copyRef;
+- (void)loadStreamableURLFromRef:(NSString *)copyRef params:(NSDictionary *)params;
 
 - (void)blitz:(NSString *)filename toPath:(NSString *)path sha1:(NSString *)sha1 size:(unsigned long long)size;
 
@@ -154,8 +158,10 @@ typedef enum {
 - (void)loadSharesMetadata:(NSString *)cpRef;
 
 - (void)loadSharesMetadata:(NSString *)cpRef withAccessCode:(NSString *)accessCode;
+- (void)loadSharesMetadata:(NSString *)cpRef withAccessCode:(NSString *)accessCode params:(NSDictionary *)params;
 
 - (void)loadSharesMetadataFromMyFriend:(NSString *)cpRef;
+- (void)loadSharesMetadataFromMyFriend:(NSString *)cpRef params:(NSDictionary *)params;
 
 - (void)loadSharesCategory:(NSString *)categoryId params:(NSDictionary *)params; //platform: 可选，string，ios或者android，只有这两个值有效。表示不同设备
 

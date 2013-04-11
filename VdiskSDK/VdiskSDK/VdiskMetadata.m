@@ -40,6 +40,15 @@
 @synthesize extInfo = _extInfo;
 @synthesize userinfo = _userinfo;
 
+@synthesize shareStatus = _shareStatus;
+@synthesize readURL = _readURL;
+@synthesize videoMP4URL = _videoMP4URL;
+@synthesize audioMP3URL = _audioMP3URL;
+@synthesize readThumbnail = _readThumbnail;
+@synthesize videoThumbnail = _videoThumbnail;
+
+
+
 
 + (NSDateFormatter *)dateFormatter {
     
@@ -115,6 +124,14 @@
             _fileSha1 = [[dict objectForKey:@"sha1"] retain];
             _userinfo = [[NSMutableDictionary alloc] init];
             
+            /* need_ext */
+            _shareStatus = [[dict objectForKey:@"share_status"] retain];
+            _readURL = [[dict objectForKey:@"read_url"] retain];
+            _videoMP4URL = [[dict objectForKey:@"video_mp4_url"] retain];
+            _audioMP3URL = [[dict objectForKey:@"audio_mp3_url"] retain];
+            _readThumbnail = [[dict objectForKey:@"read_thumbnail"] retain];
+            _videoThumbnail = [[dict objectForKey:@"video_thumbnail"] retain];
+            
             
         } @catch (NSException *exception) {
             
@@ -146,6 +163,13 @@
     [_extInfo release];
     [_userinfo release];
     
+    [_shareStatus release];
+    [_readURL release];
+    [_videoMP4URL release];
+    [_audioMP3URL release];
+    [_readThumbnail release];
+    [_videoThumbnail release];
+    
     [super dealloc];
 }
 
@@ -168,6 +192,59 @@
     
     return _filename;
 }
+
+
+
+- (BOOL)existsReadURL {
+    
+    if (_readURL && [_readURL isKindOfClass:[NSString class]] && [_readURL length] > 0) {
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)existsVideoMP4URL {
+
+    if (_videoMP4URL && [_videoMP4URL isKindOfClass:[NSString class]] && [_videoMP4URL length] > 0) {
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)existsAudioMP3URL {
+
+    if (_audioMP3URL && [_audioMP3URL isKindOfClass:[NSString class]] && [_audioMP3URL length] > 0) {
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)existsReadThumbnail {
+
+    if (_readThumbnail && [_readThumbnail isKindOfClass:[NSString class]] && [_readThumbnail length] > 0) {
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)existsVideoThumbnail {
+
+    if (_videoThumbnail && [_videoThumbnail isKindOfClass:[NSString class]] && [_videoThumbnail length] > 0) {
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
 
 - (NSDictionary *)dictionaryValue {
     
@@ -257,6 +334,16 @@
         _fileSha1 = [[coder decodeObjectForKey:@"sha1"] retain];
         _extInfo = [[coder decodeObjectForKey:@"extInfo"] retain];
         _userinfo = [[NSMutableDictionary alloc] initWithDictionary:[coder decodeObjectForKey:@"userinfo"]];
+        
+        
+        /* need_ext */
+        _shareStatus = [[coder decodeObjectForKey:@"shareStatus"] retain];
+        _readURL = [[coder decodeObjectForKey:@"readURL"] retain];
+        _videoMP4URL = [[coder decodeObjectForKey:@"videoMP4URL"] retain];
+        _audioMP3URL = [[coder decodeObjectForKey:@"audioMP3URL"] retain];
+        _readThumbnail = [[coder decodeObjectForKey:@"readThumbnail"] retain];
+        _videoThumbnail = [[coder decodeObjectForKey:@"videoThumbnail"] retain];
+        
     }
     
     return self;
@@ -282,6 +369,15 @@
     [coder encodeObject:_fileSha1 forKey:@"sha1"];
     [coder encodeObject:_extInfo forKey:@"extInfo"];
     [coder encodeObject:_userinfo forKey:@"userinfo"];
+    
+    
+    /* need_ext */
+    [coder encodeObject:_shareStatus forKey:@"shareStatus"];
+    [coder encodeObject:_readURL forKey:@"readURL"];
+    [coder encodeObject:_videoMP4URL forKey:@"videoMP4URL"];
+    [coder encodeObject:_audioMP3URL forKey:@"audioMP3URL"];
+    [coder encodeObject:_readThumbnail forKey:@"readThumbnail"];
+    [coder encodeObject:_videoThumbnail forKey:@"videoThumbnail"];
 }
 
 @end

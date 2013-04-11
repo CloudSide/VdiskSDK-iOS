@@ -90,11 +90,11 @@ typedef enum {
 
 
 #ifndef DEBUG_CURL_LOG
-    #define DEBUG_CURL_LOG                      0
+    #define DEBUG_CURL_LOG                      1
 #endif
 
 #ifndef DEBUG_REQUEST_LOG
-    #define DEBUG_REQUEST_LOG                   0
+    #define DEBUG_REQUEST_LOG                   1
 #endif
 
 #define kVdiskShareListRecommendListForUser     @"/recommend/list_for_user"

@@ -1964,16 +1964,31 @@
 }
 
 
-- (void)loadStreamableURLForFile:(NSString *)path {
+- (void)loadStreamableURLForFile:(NSString *)path params:(NSDictionary *)params {
+    
+    NSMutableDictionary *mutableParams = [NSMutableDictionary dictionary];
+    
+    if (params != nil) {
+        
+        [mutableParams addEntriesFromDictionary:params];
+    }
     
     NSString *fullPath = [NSString stringWithFormat:@"/media/%@%@", _root, path];
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:nil];
     VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURL:)]
-     autorelease];
-    request.userInfo = [NSDictionary dictionaryWithObject:path forKey:@"path"];
+                                    autorelease];
+    
+    [mutableParams setValue:path forKey:@"path"];
+    request.userInfo = mutableParams;
+    
     [_requests addObject:request];
     
     [request start];
+}
+
+- (void)loadStreamableURLForFile:(NSString *)path {
+    
+    [self loadStreamableURLForFile:path params:nil];
 }
 
 - (void)requestDidLoadStreamableURL:(VdiskComplexRequest *)request {
@@ -2002,17 +2017,29 @@
     [_requests removeObject:request];
 }
 
-
-- (void)loadStreamableURLFromRef:(NSString *)copyRef {
+- (void)loadStreamableURLFromRef:(NSString *)copyRef params:(NSDictionary *)params {
     
-    NSDictionary *params = [NSDictionary dictionaryWithObject:copyRef forKey:@"from_copy_ref"];
+    NSMutableDictionary *mutableParams = [NSMutableDictionary dictionary];
+    
+    if (params != nil) {
+        
+        [mutableParams addEntriesFromDictionary:params];
+    }
+    
+    [mutableParams setValue:copyRef forKey:@"from_copy_ref"];
+    
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/shareops/media" parameters:params];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURLFromRef:)]
-                                    autorelease];
-    request.userInfo = params;
+    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURLFromRef:)] autorelease];
+    
+    request.userInfo = mutableParams;
     [_requests addObject:request];
     
     [request start];
+}
+
+- (void)loadStreamableURLFromRef:(NSString *)copyRef {
+    
+    [self loadStreamableURLFromRef:copyRef params:nil];
 }
 
 - (void)requestDidLoadStreamableURLFromRef:(VdiskComplexRequest *)request {
@@ -2364,12 +2391,17 @@
     [_requests removeObject:request];
 }
 
-- (void)loadSharesMetadata:(NSString *)cpRef withAccessCode:(NSString *)accessCode {
-    
+- (void)loadSharesMetadata:(NSString *)cpRef withAccessCode:(NSString *)accessCode params:(NSDictionary *)params {
+
     NSString *apiName = @"/linkcommon/get";
     
     NSMutableDictionary *mutableParams = [NSMutableDictionary dictionary];
+    
+    if (params != nil) {
         
+        [mutableParams addEntriesFromDictionary:params];
+    }
+    
     [mutableParams setValue:cpRef forKey:@"from_copy_ref"];
     [mutableParams setValue:accessCode forKey:@"access_code"];
     
@@ -2389,6 +2421,11 @@
     [_requests addObject:request];
     
     [request start];
+}
+
+- (void)loadSharesMetadata:(NSString *)cpRef withAccessCode:(NSString *)accessCode {
+    
+    [self loadSharesMetadata:cpRef withAccessCode:accessCode params:nil];
 }
 
 - (void)requestDidLoadSharesMetadataWithAccessCode:(VdiskComplexRequest *)request {
@@ -2441,13 +2478,19 @@
     [_requests removeObject:request];
 }
 
-- (void)loadSharesMetadataFromMyFriend:(NSString *)cpRef {
+- (void)loadSharesMetadataFromMyFriend:(NSString *)cpRef params:(NSDictionary *)params {
 
     NSString *apiName = @"/sharefriend/get";
     
     NSMutableDictionary *mutableParams = [NSMutableDictionary dictionary];
-    [mutableParams setValue:cpRef forKey:@"from_copy_ref"];
     
+    if (params != nil) {
+        
+        [mutableParams addEntriesFromDictionary:params];
+    }
+    
+    [mutableParams setValue:cpRef forKey:@"from_copy_ref"];
+            
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
     
     VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadataFromMyFriend:)] autorelease];
@@ -2464,6 +2507,11 @@
     [_requests addObject:request];
     
     [request start];
+}
+
+- (void)loadSharesMetadataFromMyFriend:(NSString *)cpRef {
+
+    [self loadSharesMetadataFromMyFriend:cpRef params:nil];
 }
 
 - (void)requestDidLoadSharesMetadataFromMyFriend:(VdiskComplexRequest *)request {
