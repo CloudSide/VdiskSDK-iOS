@@ -140,6 +140,7 @@ typedef enum {
 - (void)loadAccountInfo;
 
 - (void)searchPath:(NSString *)path forKeyword:(NSString *)keyword;
+- (void)searchPath:(NSString *)path forKeyword:(NSString *)keyword params:(NSDictionary *)params;
 
 - (void)loadSharableLinkForFile:(NSString *)path;
 
@@ -307,9 +308,11 @@ typedef enum {
 - (void)restClient:(VdiskRestClient *)restClient loadedSharableLink:(NSString *)link forFile:(NSString *)path;
 - (void)restClient:(VdiskRestClient *)restClient loadSharableLinkFailedWithError:(NSError *)error;
 
+- (void)restClient:(VdiskRestClient *)restClient loadedStreamableURL:(NSURL *)url info:(NSDictionary *)info forFile:(NSString *)path;
 - (void)restClient:(VdiskRestClient *)restClient loadedStreamableURL:(NSURL *)url forFile:(NSString *)path;
 - (void)restClient:(VdiskRestClient *)restClient loadStreamableURLFailedWithError:(NSError *)error;
 
+- (void)restClient:(VdiskRestClient *)restClient loadedStreamableURL:(NSURL *)url info:(NSDictionary *)info fromRef:(NSString *)copyRef;
 - (void)restClient:(VdiskRestClient *)restClient loadedStreamableURL:(NSURL *)url fromRef:(NSString *)copyRef;
 - (void)restClient:(VdiskRestClient *)restClient loadStreamableURLFromRefFailedWithError:(NSError *)error;
 

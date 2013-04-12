@@ -1859,19 +1859,43 @@
     [_requests removeObject:request];
 }
 
-- (void)searchPath:(NSString *)path forKeyword:(NSString *)keyword {
+
+- (void)searchPath:(NSString *)path forKeyword:(NSString *)keyword params:(NSDictionary *)params {
     
-    NSDictionary *params = [NSDictionary dictionaryWithObject:keyword forKey:@"query"];
+    NSMutableDictionary *mutableParams = [NSMutableDictionary dictionary];
+    
+    if (params != nil) {
+        
+        [mutableParams addEntriesFromDictionary:params];
+    }
+    
+    [mutableParams setValue:keyword forKey:@"query"];
+    
     NSString *fullPath = [NSString stringWithFormat:@"/search/%@%@", _root, path];
     
-    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidSearchPath:)]
-     autorelease];
-    request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:path, @"path", keyword, @"keyword", nil];
+    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:mutableParams];
+    
+    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidSearchPath:)] autorelease];
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:path, @"path", keyword, @"keyword", nil];
+    
+    if (mutableParams) {
+        
+        [userInfo addEntriesFromDictionary:mutableParams];
+    }
+    
+    request.userInfo = userInfo;
+    
     [_requests addObject:request];
     
     [request start];
     
+}
+
+
+- (void)searchPath:(NSString *)path forKeyword:(NSString *)keyword {
+    
+    [self searchPath:path forKeyword:keyword params:nil];
 }
 
 
@@ -1974,12 +1998,18 @@
     }
     
     NSString *fullPath = [NSString stringWithFormat:@"/media/%@%@", _root, path];
-    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:nil];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURL:)]
-                                    autorelease];
+    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:mutableParams];
+    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURL:)] autorelease];
     
-    [mutableParams setValue:path forKey:@"path"];
-    request.userInfo = mutableParams;
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:path forKey:@"path"];
+    
+    if (mutableParams) {
+        
+        [userInfo addEntriesFromDictionary:mutableParams];
+    }
+    
+    request.userInfo = userInfo;
     
     [_requests addObject:request];
     
@@ -2011,6 +2041,10 @@
         if ([_delegate respondsToSelector:@selector(restClient:loadedStreamableURL:forFile:)]) {
         
             [_delegate restClient:self loadedStreamableURL:url forFile:path];
+        
+        } else if ([_delegate respondsToSelector:@selector(restClient:loadedStreamableURL:info:forFile:)]) {
+        
+            [_delegate restClient:self loadedStreamableURL:url info:response forFile:path];
         }
     }
     
@@ -2028,10 +2062,11 @@
     
     [mutableParams setValue:copyRef forKey:@"from_copy_ref"];
     
-    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/shareops/media" parameters:params];
+    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/shareops/media" parameters:mutableParams];
     VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURLFromRef:)] autorelease];
     
-    request.userInfo = mutableParams;
+    request.userInfo = [[mutableParams mutableCopy] autorelease];
+    
     [_requests addObject:request];
     
     [request start];
@@ -2062,6 +2097,10 @@
         if ([_delegate respondsToSelector:@selector(restClient:loadedStreamableURL:fromRef:)]) {
             
             [_delegate restClient:self loadedStreamableURL:url fromRef:copyRef];
+        
+        } else if ([_delegate respondsToSelector:@selector(restClient:loadedStreamableURL:info:fromRef:)]) {
+        
+            [_delegate restClient:self loadedStreamableURL:url info:response fromRef:copyRef];
         }
     }
     
