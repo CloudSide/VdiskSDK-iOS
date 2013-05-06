@@ -8,9 +8,15 @@ RESTful API文档:
 http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
 
 
-关于微盘OPENAPI、SDK使用以及技术问题请联系: [@一个开发者](http://weibo.com/smcz)
+关于微盘OPENAPI、SDK使用以及技术问题请联系: [@一个开发者](http://weibo.com/smcz) [@Littlebox222](http://weibo.com/littlebox222)
+
+QQ群: 134719337、162285095
+
+邮箱: [cloudside@sina.cn](mailto:cloudside@sina.cn)
 
 [![](http://service.t.sina.com.cn/widget/qmd/1656360925/02781ba4/4.png)](http://weibo.com/smcz)
+
+[![](http://service.t.sina.com.cn/widget/qmd/2162653704/02781ba4/4.png)](http://weibo.com/littlebox222)
 
 -----
 Usage
