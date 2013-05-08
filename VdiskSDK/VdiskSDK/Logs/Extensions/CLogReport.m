@@ -75,7 +75,7 @@ static CLogReport *kSharedLogReport = nil;
         
         _logsDirectory = [logsDirectory copy];
         _reportURL = [kVdiskLogsReportURL retain];
-        //_reportURL = [@"https://content.vdisk.me/2/report/new" retain];
+        //_reportURL = [@"https://content.weipan.cn/2/report/new" retain];
         //_reportURL = [@"http://10.73.48.235/2/report/new" retain];
         
         
@@ -160,7 +160,7 @@ static CLogReport *kSharedLogReport = nil;
             [_request setShouldAttemptPersistentConnection:YES];
             [_request setTimeOutSeconds:60];
             [VdiskRestClient signRequest:_request];
-            //[_request addRequestHeader:@"Host" value:@"content.vdisk.me"];
+            //[_request addRequestHeader:@"Host" value:@"content.weipan.cn"];
             
             NSArray *tempArray = [fileManager contentsOfDirectoryAtPath:_logsDirectory error:nil];
             

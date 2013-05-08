@@ -307,7 +307,7 @@ static VdiskSession *kVdiskSharedSession = nil;
 - (void)readAuthorizeDataFromKeychain {
     
     NSString *serviceName = [[self urlSchemeString] stringByAppendingString:kVdiskKeychainServiceNameSuffix];
-
+    
     NSData *data = [VdiskKeychain passwordDataForService:serviceName account:kVdiskKeychainAccountIdentity];
     
     if (data == nil || [data length] == 0) {
@@ -325,7 +325,7 @@ static VdiskSession *kVdiskSharedSession = nil;
         self.refreshToken = [unarchiver decodeObjectForKey:kVdiskKeychainRefreshToken];
         self.expireTime = [unarchiver decodeDoubleForKey:kVdiskKeychainExpireTime];
         _sessionType = [unarchiver decodeIntForKey:kVdiskKeychainSessionType];
-    
+        
     } @catch (NSException *exception) {
         
         [self deleteAuthorizeDataInKeychain];

@@ -32,7 +32,7 @@
 */
 
 /*
-#define kVdiskSDKAPIDomain             @"https://openapi.vdisk.me/2/"
+#define kVdiskSDKAPIDomain             @"https://api.weipan.cn/2/"
 */
 
 /*
@@ -105,13 +105,13 @@ typedef enum {
 
 #define kVdiskAuthorizeURL                      @"https://auth.sina.com.cn/oauth2/authorize"
 #define kVdiskAccessTokenURL                    @"https://auth.sina.com.cn/oauth2/access_token"
-#define kVdiskLogsReportURL                     @"http://content.vdisk.me/2/report/new"             //@"http://test.php.vdisk.me/2/report/new"
+#define kVdiskLogsReportURL                     @"http://content.weipan.cn/2/report/new"             //@"http://test.php.weipan.cn/2/report/new"
 
 #define kVdiskSDKVersion                        @"1.1.1"                                            //TODO: parameterize from build system
-#define kVdiskAPIHost                           @"openapi.vdisk.me"                                 
+#define kVdiskAPIHost                           @"api.weipan.cn"
 //#define kVdiskAPIHost                           @"20.vdiskapi.appsina.com"                          /* [Cloud Mario] ... */
 #define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn:4443"
-#define kVdiskAPIContentHost                    @"upload.openapi.vdisk.me"
+#define kVdiskAPIContentHost                    @"upload-vdisk.sina.com.cn"
 #define kVdiskAPIVersion                        @"2"
 #define kVdiskRootBasic                         @"basic"
 #define kVdiskRootAppFolder                     @"sandbox"
