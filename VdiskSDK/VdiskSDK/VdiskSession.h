@@ -121,6 +121,9 @@ typedef enum {
 // If succeed, engineDidLogIn will be called.
 - (void)link;
 - (void)linkWithSessionType:(VdiskSessionType)sessionType;
+
+- (void)linkUsingWeiboAccessToken:(NSString *)accessToken userID:(NSString *)userID expireTime:(NSTimeInterval)expireTime refreshToken:(NSString *)refreshToken;
+
 //user refreshToken
 - (void)refreshLink;
 // Log in using OAuth Client authorization.

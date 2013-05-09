@@ -377,6 +377,21 @@ static VdiskSession *kVdiskSharedSession = nil;
     [self link];
 }
 
+- (void)linkUsingWeiboAccessToken:(NSString *)accessToken userID:(NSString *)userID expireTime:(NSTimeInterval)expireTime refreshToken:(NSString *)refreshToken {
+
+    _sessionType = kVdiskSessionTypeWeiboAccessToken;
+    
+    self.sinaUserID = userID;
+    self.userID = @"0";
+    self.accessToken = accessToken;
+    self.refreshToken = refreshToken;
+    self.expireTime = [[NSDate dateWithTimeIntervalSinceNow:expireTime] timeIntervalSince1970];
+    
+    VdiskRestClient *restClient = [[VdiskRestClient alloc] initWithSession:self];
+    restClient.delegate = self;
+    [restClient loadAccountInfo];
+}
+
 - (void)link {
     
     /*
