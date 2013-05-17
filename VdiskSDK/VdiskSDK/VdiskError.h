@@ -27,12 +27,13 @@ typedef enum {
     kVdiskErrorGenericError                 = 1000,
     kVdiskErrorFileNotFound                 = 1001,
     kVdiskErrorInsufficientDiskSpace        = 1002,
-    kVdiskErrorIllegalFileType              = 1003,     // Error sent if you try to upload a directory
-    kVdiskErrorInvalidResponse              = 1004,     // Sent when the client does not get valid JSON when it's expecting it, 或者json解析成功了，但是返回内容和文档不一致，或者缺少对应的字段
+    kVdiskErrorIllegalFileType              = 1003,         // Error sent if you try to upload a directory
+    kVdiskErrorInvalidResponse              = 1004,         // Sent when the client does not get valid JSON when it's expecting it, 或者json解析成功了，但是返回内容和文档不一致，或者缺少对应的字段
     kVdiskErrorSessionError                 = 1005,
-    kVdiskErrorFileContentLengthNotMatch	= 1006,     // 下载文件的大小和http响应头Content-Length不一致
-    kVdiskErrorGetFileAttributesFailure     = 1007,     // 获得文件属性失败
-    kVdiskErrorS3URLExpired                 = 1008,     // S3下载链接过期
+    kVdiskErrorFileContentLengthNotMatch	= 1006,         // 下载文件的大小和http响应头Content-Length不一致
+    kVdiskErrorGetFileAttributesFailure     = 1007,         // 获得文件属性失败
+    kVdiskErrorS3URLExpired                 = 1008,         // S3下载链接过期
+    kVdiskErrorMd5NotMatched                = 1009,         // 大文件分片上传一段文件后,服务器返回的该段文件md5和本地该段文件md5不匹配
     
 } kVdiskErrorCode;
 

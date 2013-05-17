@@ -467,6 +467,8 @@
             return;
         }
         
+        /* custom_key_4 = upload_total_bytes, custom_value_4 = 文件总大小 */
+        
         [_vdiskRestClient initializeComplexUpload:_destPath uploadHost:_s3host partTotal:_partNum size:[NSNumber numberWithUnsignedLongLong:fileSize] params:params];
         
         [params release];
@@ -686,7 +688,12 @@
         return;
     }
     
-    [_vdiskRestClient mergeComplexUpload:self.destPath uploadHost:self.s3host uploadId:self.uploadId uploadKey:self.uploadKey sha1:self.fileSHA1 md5List:[self _md5sString] params:self.otherParams];
+    /* custom_key_4 = upload_total_bytes, custom_value_4 = 文件总大小 */
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.otherParams];
+    [params setValue:[NSString stringWithFormat:@"%llu", _fileSize] forKey:@"upload_total_bytes"];
+    
+    [_vdiskRestClient mergeComplexUpload:self.destPath uploadHost:self.s3host uploadId:self.uploadId uploadKey:self.uploadKey sha1:self.fileSHA1 md5List:[self _md5sString] params:params];
     
     if ([_delegate respondsToSelector:@selector(complexUpload:startedWithStatus:destPath:srcPath:)]) {
         

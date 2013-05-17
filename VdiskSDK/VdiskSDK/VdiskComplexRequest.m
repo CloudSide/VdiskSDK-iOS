@@ -92,13 +92,15 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             NSString *value1 = [self.userInfo objectForKey:@"upload_type"] ? [self.userInfo objectForKey:@"upload_type"] : @"-";
             NSString *value2 = [self.userInfo objectForKey:@"uploadId"] ? [self.userInfo objectForKey:@"uploadId"] : @"-";
             NSString *value3 = [self.userInfo objectForKey:@"destinationPath"] ? [self.userInfo objectForKey:@"destinationPath"] : @"-";
-            
+            NSString *value4 = [self.userInfo objectForKey:@"uploadTotalBytes"] ? [self.userInfo objectForKey:@"uploadTotalBytes"] : @"-";
+                        
             NSString *key1 = [value1 isEqualToString:@"-"] ? @"-" : @"upload_type";
             NSString *key2 = [value2 isEqualToString:@"-"] ? @"-" : @"upload_id";
             NSString *key3 = [value3 isEqualToString:@"-"] ? @"-" : @"upload_path";
+            NSString *key4 = [value4 isEqualToString:@"-"] ? @"-" : @"upload_total_bytes";
             
             [_clog setCustomType:@"upload"];
-            [_clog setCustomKeys:@[key1, key2, key3] andValues:@[value1, value2, value3]];
+            [_clog setCustomKeys:@[key1, key2, key3, key4] andValues:@[value1, value2, value3, value4]];
         }
         
         if (self.userInfo && [self.userInfo objectForKey:@"error"] && [[self.userInfo objectForKey:@"error"] isKindOfClass:[NSError class]]) {

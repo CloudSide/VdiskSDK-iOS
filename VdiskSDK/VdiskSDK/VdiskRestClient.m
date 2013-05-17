@@ -802,7 +802,7 @@
     VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidInitializeComplexUpload:)] autorelease];
     
     request.userInfo = [[initParams mutableCopy] autorelease];
-    [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex", @"destinationPath" : path}];
+    [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex", @"destinationPath" : path, @"uploadTotalBytes" : [size stringValue]}];
     
     [initParams release];
     
@@ -925,6 +925,15 @@
     [completeParams setObject:sha1 forKey:@"sha1"];
     [completeParams setObject:md5List forKey:@"md5_list"];
     
+    NSString *uploadTotalBytes = @"-";
+    
+    if ([completeParams objectForKey:@"upload_total_bytes"]) {
+        
+        uploadTotalBytes = [[[completeParams objectForKey:@"upload_total_bytes"] copy] autorelease];
+        [completeParams removeObjectForKey:@"upload_total_bytes"];
+        
+    }
+    
     NSDictionary *requestParams = [[NSDictionary alloc] initWithObjectsAndKeys:
                                    kVdiskAPIHost, @"host",
                                    @"/multipart/complete", @"path",
@@ -947,7 +956,7 @@
                         sha1, @"sha1",
                         md5List, @"md5List", nil];
     
-    [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex"}];
+    [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex", @"uploadTotalBytes" : uploadTotalBytes}];
     
     [_requests addObject:request];
     
