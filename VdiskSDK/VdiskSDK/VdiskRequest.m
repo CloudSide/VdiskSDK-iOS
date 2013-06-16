@@ -230,7 +230,7 @@
     
     for (NSString *key in [_httpHeaderFields allKeys]) {
         
-        curlString = [curlString stringByAppendingFormat:@" -H \"%@:%@\"", key, [_httpHeaderFields objectForKey:key]];
+        curlString = [curlString stringByAppendingFormat:@" -H '%@:%@'", key, [_httpHeaderFields objectForKey:key]];
     }
     
     if ([_httpMethod isEqualToString:@"POST"]) {
