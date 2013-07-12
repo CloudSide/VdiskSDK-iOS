@@ -47,6 +47,9 @@
     NSString *_audioMP3URL;
     NSString *_readThumbnail;
     NSString *_videoThumbnail;
+    
+    NSString *_sharefriend;
+    NSString *_linkcommon;
 }
 
 + (NSDateFormatter *)dateFormatter;
@@ -81,6 +84,8 @@
 @property (nonatomic, readonly) NSString *fileSha1;
 @property (nonatomic, readonly) NSString *extInfo;
 @property (nonatomic, readonly) NSMutableDictionary *userinfo;
+@property (nonatomic, readonly) NSString *sharefriend;
+@property (nonatomic, readonly) NSString *linkcommon;
 
 
 /* need_ext */

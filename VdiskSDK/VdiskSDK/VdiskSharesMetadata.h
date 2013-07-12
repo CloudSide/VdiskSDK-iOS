@@ -9,6 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "VdiskMetadata.h"
 
+typedef enum {
+    
+    kVdiskSharesMetadataTypePublic = 0,
+    kVdiskSharesMetadataTypeFromFriend,
+    kVdiskSharesMetadataTypeLinkcommon,
+    
+} kVdiskSharesMetadataType;
+
+
 @interface VdiskSharesMetadata : VdiskMetadata <NSCoding> {
 
     NSString *_appKey;
@@ -42,6 +51,7 @@
     NSString *_shareAuth;
     NSString *_thumbnail;
     
+    int _sharesMetadataType;
 }
 
 @property (nonatomic, readonly) NSString *appKey;
@@ -74,5 +84,9 @@
 @property (nonatomic, readonly) NSString *degree;
 @property (nonatomic, readonly) NSString *shareAuth;
 @property (nonatomic, readonly) NSString *thumbnail;
+
+@property (nonatomic, assign) int sharesMetadataType;
+
+- (id)initWithDictionary:(NSDictionary *)dict sharesMetadataType:(kVdiskSharesMetadataType)sharesMetadataType;
 
 @end

@@ -135,6 +135,8 @@ typedef enum {
 
 - (void)copyFromMyFriendRef:(NSString *)copyRef toPath:(NSString *)toPath;
 
+- (void)copyFromMyFriendRef:(NSString *)copyRef toPath:(NSString *)toPath params:(NSDictionary *)params;
+
 - (void)moveFrom:(NSString *)fromPath toPath:(NSString *)toPath;
 
 - (void)loadAccountInfo;
@@ -178,6 +180,8 @@ typedef enum {
 
 + (NSString *)humanReadableSize:(unsigned long long)length;
 + (void)signRequest:(ASIHTTPRequest *)request;
+// This method escapes all URI escape characters except "/"
++ (NSString *)escapePath:(NSString *)path;
 
 @property (nonatomic, assign) id<VdiskRestClientDelegate> delegate;
 

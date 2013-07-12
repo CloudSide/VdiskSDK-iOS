@@ -308,7 +308,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"操作无效(40001)";
             break;
         case 40002:
-            message = @"路径错误.";
+            message = @"路径错误, 不能包含特殊字符.";
             break;
         case 40003:
             message = @"目标路径不存在.";
@@ -332,7 +332,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"操作无效(40303).";
             break;
         case 40304:
-            message = @"由于政策限制, 该文件夹不允许分享.";
+            message = @"由于政策限制, 该文件(夹)不允许分享.";
             break;
         case 40305:
             message = @"不允许操作此文件";
@@ -360,6 +360,9 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             break;
         case 40313:
             message = @"分享操作涉及到文件或目录过多.";
+            break;
+        case 40315:
+            message = @"目标文件夹已存在.";
             break;
         case 40401:
             message = @"用户不存在.";

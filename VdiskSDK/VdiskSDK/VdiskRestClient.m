@@ -33,8 +33,6 @@
 
 @interface VdiskRestClient ()
 
-// This method escapes all URI escape characters except "/"
-+ (NSString *)escapePath:(NSString *)path;
 - (ASIFormDataRequest *)requestWithHost:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params;
 - (ASIFormDataRequest *)requestWithHost:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params method:(NSString *)method;
 - (BOOL)checkSessionStatus;
@@ -1603,11 +1601,18 @@
     
 }
 
-- (void)copyFromMyFriendRef:(NSString *)copyRef toPath:(NSString *)toPath {
-
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:toPath, @"to_path", copyRef, @"from_copy_ref", _root, @"root", nil];
+- (void)copyFromMyFriendRef:(NSString *)copyRef toPath:(NSString *)toPath params:(NSDictionary *)params {
     
-    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/sharefriend/copy" parameters:params method:@"POST"];
+    NSMutableDictionary *mutableParams = [NSMutableDictionary dictionary];
+    
+    if (params != nil) {
+        
+        [mutableParams addEntriesFromDictionary:params];
+    }
+    
+    [mutableParams addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:toPath, @"to_path", copyRef, @"from_copy_ref", _root, @"root", nil]];
+    
+    ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/sharefriend/copy" parameters:mutableParams method:@"POST"];
     
     VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromMyFriendRef:)]
                                     autorelease];
@@ -1617,6 +1622,11 @@
     [_requests addObject:request];
     
     [request start];
+}
+
+- (void)copyFromMyFriendRef:(NSString *)copyRef toPath:(NSString *)toPath {
+
+    [self copyFromMyFriendRef:copyRef toPath:toPath params:nil];
 }
 
 - (void)requestDidCopyFromMyFriendRef:(VdiskComplexRequest *)request {
@@ -2509,7 +2519,7 @@
                 
             } else {
                 
-                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result sharesMetadataType:kVdiskSharesMetadataTypeLinkcommon] autorelease];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -2595,7 +2605,7 @@
                 
             } else {
                 
-                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result sharesMetadataType:kVdiskSharesMetadataTypeFromFriend] autorelease];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     

@@ -40,14 +40,17 @@
 @synthesize degree = _degree;
 @synthesize shareAuth = _shareAuth;
 @synthesize thumbnail = _thumbnail;
+@synthesize sharesMetadataType = _sharesMetadataType;
 
 
-- (id)initWithDictionary:(NSDictionary *)dict {
+- (id)initWithDictionary:(NSDictionary *)dict sharesMetadataType:(kVdiskSharesMetadataType)sharesMetadataType {
+
     
     if ((self = [super initWithDictionary:dict])) {
         
         @try {
             
+            _sharesMetadataType = sharesMetadataType;
             
             if ([dict objectForKey:@"share_time"]) {
                 
@@ -62,6 +65,7 @@
                 for (NSDictionary *subfileDict in subfileDicts) {
                     
                     VdiskSharesMetadata *subfile = [[VdiskSharesMetadata alloc] initWithDictionary:subfileDict];
+                    subfile.sharesMetadataType = self.sharesMetadataType;
                     [mutableContents addObject:subfile];
                     [subfile release];
                 }
@@ -139,10 +143,10 @@
             
             _thumbnail = [[dict objectForKey:@"thumbnail"] retain];
             
-        
+            
         } @catch (NSException *exception) {
             
-            
+            NSLog(@"%@", exception);
             
         } @finally {
             
@@ -151,6 +155,12 @@
     }
     
     return self;
+    
+}
+
+- (id)initWithDictionary:(NSDictionary *)dict {
+    
+    return [self initWithDictionary:dict sharesMetadataType:kVdiskSharesMetadataTypePublic];
 }
 
 - (void)dealloc {
@@ -295,8 +305,9 @@
         _price = [[coder decodeObjectForKey:@"price"] retain];
         _degree = [[coder decodeObjectForKey:@"degree"] retain];
         _shareAuth = [[coder decodeObjectForKey:@"shareAuth"] retain];
-        
         _thumbnail = [[coder decodeObjectForKey:@"thumbnail"] retain];
+        
+        _sharesMetadataType = [coder decodeIntForKey:@"sharesMetadataType"];
     
     }
     
@@ -336,8 +347,9 @@
     [coder encodeObject:_price forKey:@"price"];
     [coder encodeObject:_degree forKey:@"degree"];
     [coder encodeObject:_shareAuth forKey:@"shareAuth"];
-    
     [coder encodeObject:_thumbnail forKey:@"thumbnail"];
+    
+    [coder encodeInt:_sharesMetadataType forKey:@"sharesMetadataType"];
     
 }
 

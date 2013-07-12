@@ -110,7 +110,8 @@ typedef enum {
 #define kVdiskSDKVersion                        @"1.1.1"                                            //TODO: parameterize from build system
 #define kVdiskAPIHost                           @"api.weipan.cn"
 //#define kVdiskAPIHost                           @"20.vdiskapi.appsina.com"                          /* [Cloud Mario] ... */
-#define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn:4443"
+//#define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn:4443"
+#define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn"
 #define kVdiskAPIContentHost                    @"upload-vdisk.sina.com.cn"
 #define kVdiskAPIVersion                        @"2"
 #define kVdiskRootBasic                         @"basic"

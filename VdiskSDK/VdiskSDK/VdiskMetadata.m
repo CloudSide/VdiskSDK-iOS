@@ -47,6 +47,9 @@
 @synthesize readThumbnail = _readThumbnail;
 @synthesize videoThumbnail = _videoThumbnail;
 
+@synthesize linkcommon = _linkcommon;
+@synthesize sharefriend = _sharefriend;
+
 
 
 
@@ -131,6 +134,8 @@
             _audioMP3URL = [[dict objectForKey:@"audio_mp3_url"] retain];
             _readThumbnail = [[dict objectForKey:@"read_thumbnail"] retain];
             _videoThumbnail = [[dict objectForKey:@"video_thumbnail"] retain];
+            _linkcommon = [[dict objectForKey:@"linkcommon"] retain];
+            _sharefriend = [[dict objectForKey:@"sharefriend"] retain];
             
             
         } @catch (NSException *exception) {
@@ -169,6 +174,9 @@
     [_audioMP3URL release];
     [_readThumbnail release];
     [_videoThumbnail release];
+    
+    [_linkcommon release];
+    [_sharefriend release];
     
     [super dealloc];
 }
@@ -343,6 +351,8 @@
         _audioMP3URL = [[coder decodeObjectForKey:@"audioMP3URL"] retain];
         _readThumbnail = [[coder decodeObjectForKey:@"readThumbnail"] retain];
         _videoThumbnail = [[coder decodeObjectForKey:@"videoThumbnail"] retain];
+        _linkcommon = [[coder decodeObjectForKey:@"linkcommon"] retain];
+        _sharefriend = [[coder decodeObjectForKey:@"sharefriend"] retain];
         
     }
     
@@ -378,6 +388,8 @@
     [coder encodeObject:_audioMP3URL forKey:@"audioMP3URL"];
     [coder encodeObject:_readThumbnail forKey:@"readThumbnail"];
     [coder encodeObject:_videoThumbnail forKey:@"videoThumbnail"];
+    [coder encodeObject:_linkcommon forKey:@"linkcommon"];
+    [coder encodeObject:_sharefriend forKey:@"sharefriend"];
 }
 
 @end
