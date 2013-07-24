@@ -364,6 +364,9 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
         case 40315:
             message = @"目标文件夹已存在.";
             break;
+        case 40317:
+            message = @"账号异常, 您可能没有开通微博或者账号被屏蔽.";
+            break;
         case 40401:
             message = @"用户不存在.";
             break;
@@ -450,6 +453,9 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             break;
         case 40619:
             message = @"文件或目录未分享.";
+            break;
+        case 40622:
+            message = @"分享的文件或目录被屏蔽.";
             break;
         case 41001:
             message = @"文件上传失败.";

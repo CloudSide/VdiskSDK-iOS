@@ -331,12 +331,17 @@
         return;
     }
     
+    /*
+     deleted by bruce chen
     [_vdiskRestClient locateComplexUploadHost];
+     */
     
     if ([_delegate respondsToSelector:@selector(complexUpload:startedWithStatus:destPath:srcPath:)]) {
         
         [_delegate complexUpload:self startedWithStatus:kVdiskComplexUploadStatusLocateHost destPath:_destPath srcPath:_sourcePath];
     }
+    
+    [self restClient:_vdiskRestClient locatedComplexUploadHost:@"up.sinastorage.com"];
 }
 
 - (void)_readData:(NSFileHandle *)fileHandle offset:(unsigned long long)offset length:(unsigned long long)length content:(NSData **)content {
