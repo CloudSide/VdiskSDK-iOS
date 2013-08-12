@@ -1073,6 +1073,8 @@
     //HTTPS
     NSString *urlString = [NSString stringWithFormat:@"%@://%@/%@/files_put/%@%@", protocol, contentHost, kVdiskAPIVersion, root, [VdiskRestClient escapePath:destPath]];
     
+    //?s1nau1d=
+    
     if (params != nil && [params isKindOfClass:[NSDictionary class]] && [params count] > 0) {
         
         urlString = [urlString stringByAppendingFormat:@"?%@", [VdiskRequest stringFromDictionary:params]];
@@ -2965,6 +2967,8 @@
     }
     
     NSString *escapedPath = [VdiskRestClient escapePath:path];
+    
+    //?s1nau1d=
     NSString *urlString = [NSString stringWithFormat:@"%@://%@/%@%@", kVdiskProtocolHTTPS, host, kVdiskAPIVersion, escapedPath];
     
     if (params != nil && [params objectForKey:@"x-vdisk-local-userinfo"]) {

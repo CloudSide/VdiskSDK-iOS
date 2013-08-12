@@ -291,16 +291,31 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"请求不合法(21323)";
             break;
         case 21325:
-            message = @"登录超时(21325)";
+            message = @"您的授权过期或已撤销, 请重新登录(21325)";
             break;
         case 21331:
-            message = @"系统繁忙，请稍后再试(21331)";
+            message = @"服务暂时无法访问，请稍后再试(21331)";
             break;
         case 21332:
             message = @"登录超时, 请重新登录(21332)";
             break;
         case 21334:
             message = @"账号异常, 请先解除异常(21334)";
+            break;
+        case 21324:
+            message = @"client_id或client_secret参数无效(21324)";
+            break;
+        case 21326:
+            message = @"客户端没有权限(21326)";
+            break;
+        case 21328:
+            message = @"不支持的 GrantType(21328)";
+            break;
+        case 21329:
+            message = @"不支持的 ResponseType(21329)";
+            break;
+        case 21330:
+            message = @"用户或授权服务器拒绝授予数据访问权限(21330)";
             break;
             
             
