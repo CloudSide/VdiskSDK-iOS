@@ -49,9 +49,18 @@ typedef enum {
     NSMutableDictionary *_imageLoadRequests;
     NSMutableDictionary *_uploadRequests;
     id<VdiskRestClientDelegate> _delegate;
+    
+    //NSUInteger _maxConcurrent;
+    NSUInteger _maxOperationCount;
+    
+    NSOperationQueue *_requestQueue;
+    
+    NSRecursiveLock *_operationLock;
 }
 
 - (id)initWithSession:(VdiskSession *)session;
+- (id)initWithSession:(VdiskSession *)session maxConcurrent:(NSUInteger)maxConcurrent maxOperationCount:(NSUInteger)maxOperationCount;
+
 
 /* Cancels all outstanding requests. No callback for those requests will be sent */
 - (void)cancelAllRequests;
@@ -86,6 +95,9 @@ typedef enum {
 
 - (void)loadThumbnail:(NSString *)path ofSize:(NSString *)size intoPath:(NSString *)destinationPath;
 - (void)cancelThumbnailLoad:(NSString *)path size:(NSString *)size;
+
+- (void)loadThumbnailWithMetadata:(VdiskMetadata *)metadata ofSize:(NSString *)size intoPath:(NSString *)destinationPath params:(NSDictionary *)params;
+- (void)cancelThumbnailLoadWithMetadata:(VdiskMetadata *)metadata size:(NSString *)size;
 
 /* Uploads a file that will be named filename to the given path on the server. sourcePath is the
  full path of the file you want to upload. If you are modifying a file, parentRev represents the
@@ -179,6 +191,7 @@ typedef enum {
 - (NSUInteger)requestCount;
 
 + (NSString *)humanReadableSize:(unsigned long long)length;
++ (NSString *)humanReadableAppleSize:(unsigned long long)length;
 + (void)signRequest:(ASIHTTPRequest *)request;
 // This method escapes all URI escape characters except "/"
 + (NSString *)escapePath:(NSString *)path;
@@ -225,7 +238,9 @@ typedef enum {
 
 
 
-- (void)restClient:(VdiskRestClient *)client loadedThumbnail:(NSString *)destPath metadata:(VdiskMetadata *)metadata;
+- (void)restClient:(VdiskRestClient *)client loadedThumbnail:(NSString *)destPath metadata:(VdiskMetadata *)metadata size:(NSString *)size;
+- (void)restClient:(VdiskRestClient *)client loadThumbnailProgress:(CGFloat)progress destPath:(NSString *)destPath metadata:(VdiskMetadata *)metadata size:(NSString *)size;
+- (void)restClient:(VdiskRestClient *)client loadThumbnailFailedWithError:(NSError *)error metadata:(VdiskMetadata *)metadata size:(NSString *)size;
 - (void)restClient:(VdiskRestClient *)client loadThumbnailFailedWithError:(NSError *)error;
 
 - (void)restClient:(VdiskRestClient *)client uploadedFile:(NSString *)destPath from:(NSString *)srcPath metadata:(VdiskMetadata *)metadata;

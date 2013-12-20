@@ -42,8 +42,15 @@
 @synthesize thumbnail = _thumbnail;
 @synthesize sharesMetadataType = _sharesMetadataType;
 
+@synthesize accessCode = _accessCode;
+
 
 - (id)initWithDictionary:(NSDictionary *)dict sharesMetadataType:(kVdiskSharesMetadataType)sharesMetadataType {
+
+    return [self initWithDictionary:dict sharesMetadataType:sharesMetadataType accessCode:nil];
+}
+
+- (id)initWithDictionary:(NSDictionary *)dict sharesMetadataType:(kVdiskSharesMetadataType)sharesMetadataType accessCode:(NSString *)accessCode {
 
     
     if ((self = [super initWithDictionary:dict])) {
@@ -144,6 +151,12 @@
             _thumbnail = [[dict objectForKey:@"thumbnail"] retain];
             
             
+            if (sharesMetadataType == kVdiskSharesMetadataTypeLinkcommon) {
+                
+                _accessCode = [accessCode copy];
+            }
+            
+            
         } @catch (NSException *exception) {
             
             NSLog(@"%@", exception);
@@ -190,6 +203,8 @@
     [_shareAuth release];
     
     [_thumbnail release];
+    
+    [_accessCode release];
     
     [super dealloc];
 }
@@ -308,6 +323,8 @@
         _thumbnail = [[coder decodeObjectForKey:@"thumbnail"] retain];
         
         _sharesMetadataType = [coder decodeIntForKey:@"sharesMetadataType"];
+        
+        _accessCode = [[coder decodeObjectForKey:@"accessCode"] retain];
     
     }
     
@@ -351,6 +368,7 @@
     
     [coder encodeInt:_sharesMetadataType forKey:@"sharesMetadataType"];
     
+    [coder encodeObject:_accessCode forKey:@"accessCode"];
 }
 
 @end

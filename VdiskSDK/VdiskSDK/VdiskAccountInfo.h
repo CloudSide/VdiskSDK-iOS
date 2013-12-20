@@ -24,6 +24,11 @@
     NSString *_userId;
     NSString *_sinaUserId;
     NSDictionary *_original;
+    
+    NSString *_screenname;
+    NSString *_username;
+    NSURL *_avatarLarge;
+    NSURL *_avatar;
 }
 
 - (id)initWithDictionary:(NSDictionary *)dict;
@@ -31,5 +36,12 @@
 @property (nonatomic, readonly) VdiskQuota *quota;
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSString *sinaUserId;
+
+@property (nonatomic, readonly) NSString *screenname;
+@property (nonatomic, readonly) NSString *username;
+@property (nonatomic, readonly) NSURL *avatarLarge;
+@property (nonatomic, readonly) NSURL *avatar;
+
+
 
 @end

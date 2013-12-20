@@ -31,6 +31,9 @@
 #import "VdiskSharesMetadata.h"
 
 
+#pragma - mark VdiskRestClient ()
+
+
 @interface VdiskRestClient ()
 
 - (ASIFormDataRequest *)requestWithHost:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params;
@@ -40,6 +43,8 @@
 
 @end
 
+
+#pragma - mark VdiskRestClient 
 
 @implementation VdiskRestClient
 
@@ -60,39 +65,97 @@
         _loadRequests = [[NSMutableDictionary alloc] init];
         _imageLoadRequests = [[NSMutableDictionary alloc] init];
         _uploadRequests = [[NSMutableDictionary alloc] init];
+        
+        _maxOperationCount = 0;
+        _requestQueue = nil;
+        _operationLock = nil;
+    }
+    
+    return self;
+}
+
+- (id)initWithSession:(VdiskSession *)session maxConcurrent:(NSUInteger)maxConcurrent maxOperationCount:(NSUInteger)maxOperationCount {
+
+    if (self = [self initWithSession:session]) {
+        
+        _operationLock = [[NSRecursiveLock alloc] init];
+        _requestQueue = [[NSOperationQueue alloc] init];
+        [_requestQueue setMaxConcurrentOperationCount:maxConcurrent];
+        
+        if (maxOperationCount < 1) {
+            
+            _maxOperationCount = 1;
+        
+        } else {
+        
+            _maxOperationCount = maxOperationCount;
+        }
     }
     
     return self;
 }
 
 
+- (void)readyToRequest:(VdiskComplexRequest *)request {
+
+    if (_requestQueue != nil && _maxOperationCount > 0) {
+        
+        [_operationLock lock];
+        
+        if (_requestQueue.operationCount >= _maxOperationCount) {
+            
+            @try {
+                
+                VdiskComplexRequest *firstRequest = (VdiskComplexRequest *)[_requestQueue.operations objectAtIndex:0];
+                [firstRequest cancel];
+            
+            } @catch (NSException *exception) {
+              
+                NSLog(@"readyToRequest: %@", exception);
+                
+            } @finally {
+                
+                
+            }
+        }
+        
+        [_requestQueue addOperation:request];
+        
+        [_operationLock unlock];
+        
+    } else {
+    
+        [request start];
+    }
+}
+
 
 - (void)cancelAllRequests {
     
     for (VdiskComplexRequest *request in _requests) {
     
-        [request cancel];
+        [request clearSelectorsAndCancel];
     }
     
     [_requests removeAllObjects];
     
     for (VdiskComplexRequest *request in [_loadRequests allValues]) {
         
-        [request cancel];
+        [request clearSelectorsAndCancel];
     }
     
     [_loadRequests removeAllObjects];
     
     for (VdiskComplexRequest *request in [_imageLoadRequests allValues]) {
         
-        [request cancel];
+        [request clearSelectorsAndCancel];
     }
     
     [_imageLoadRequests removeAllObjects];
     
     for (VdiskComplexRequest *request in [_uploadRequests allValues]) {
       
-        [request cancel];
+        [request clearSelectorsAndCancel];
     }
     
     [_uploadRequests removeAllObjects];
@@ -110,6 +173,9 @@
     [_session release];
     [_userId release];
     [_root release];
+    
+    [_operationLock release], _operationLock = nil;
+    [_requestQueue release], _requestQueue = nil;
     
     [super dealloc];
 }
@@ -139,7 +205,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)loadMetadata:(NSString *)path {
@@ -267,7 +333,8 @@
     
     request.userInfo = params;
     [_requests addObject:request];
-    [request start];
+    
+    [self readyToRequest:request];
 }
 
 - (void)requestDidLoadDelta:(VdiskComplexRequest *)request {
@@ -384,9 +451,12 @@
                         rev, @"rev",
                         @"download", @"action", nil];
     
-    [_loadRequests setObject:request forKey:path];
+    if (![_loadRequests objectForKey:path]) {
+        
+        [_loadRequests setObject:request forKey:path];
+        [self readyToRequest:request];
+    }
     
-    [request start];
 }
 
 - (void)loadFile:(NSString *)path intoPath:(NSString *)destPath {
@@ -405,7 +475,7 @@
     
     if (outstandingRequest) {
     
-        [outstandingRequest cancel];
+        [outstandingRequest clearSelectorsAndCancel];
         [_loadRequests removeObjectForKey:path];
     }
 }
@@ -432,6 +502,13 @@
                 NSDictionary *metadataDict = [request xVdiskMetadataJSON];
                 VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
                 BOOL allowRedirect = [_delegate restClient:self loadedFileRealDownloadURL:[NSURL URLWithString:[headers objectForKey:@"Location"]] metadata:metadata];
+                
+                if (!allowRedirect) {
+                    
+                    NSString *path = [request.userInfo objectForKey:@"path"];
+                    [_loadRequests removeObjectForKey:path];
+                }
+                
                 return [NSNumber numberWithBool:allowRedirect];
             }
         }
@@ -563,7 +640,9 @@
     
     [_loadRequests setObject:request forKey:sharesMetadata.url];
     
-    [request startDownloadWithMetadata:sharesMetadata];
+    request.metadataForDownload = sharesMetadata;
+        
+    [self readyToRequest:request];
 }
 
 - (void)requestLoadFileWithSharesMetadataProgress:(VdiskComplexRequest *)request {
@@ -607,7 +686,7 @@
     
     if (outstandingRequest) {
         
-        [outstandingRequest cancel];
+        [outstandingRequest clearSelectorsAndCancel];
         
         [_loadRequests removeObjectForKey:sharesMetadata.url];
     }
@@ -619,8 +698,18 @@
     return [NSString stringWithFormat:@"%@##%@", path, size];
 }
 
+- (id)thumbnailKeyForMetadata:(VdiskMetadata *)metadata size:(NSString *)size {
+    
+    if (metadata == nil || size == nil) {
+        
+        return @[@"nil", @"nil"];
+    }
+    
+    return @[size, metadata];
+}
 
-- (void)loadThumbnail:(NSString *)path ofSize:(NSString *)size intoPath:(NSString *)destinationPath {
+
+- (void)_loadThumbnail:(NSString *)path ofSize:(NSString *)size intoPath:(NSString *)destinationPath metadata:(VdiskMetadata *)metadata {
     
     NSString *fullPath = [NSString stringWithFormat:@"/thumbnails/%@%@", _root, path];
     
@@ -648,28 +737,148 @@
     VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadThumbnail:)]
      autorelease];
     
+    request.downloadProgressSelector = @selector(requestLoadThumbnailProgress:);
+    
     request.resultFilename = destinationPath;
     
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                         _root, @"root", 
                         path, @"path", 
                         destinationPath, @"destinationPath", 
-                        size, @"size", nil];
+                        size, @"size",
+                        metadata, @"metadata", nil];
     
-    [_imageLoadRequests setObject:request forKey:[self thumbnailKeyForPath:path size:size]];
+    [request setAllowResumeForFileDownloads:NO];
     
-    [request start];
+    if (![_imageLoadRequests objectForKey:[self thumbnailKeyForPath:path size:size]]) {
+        
+        [_imageLoadRequests setObject:request forKey:[self thumbnailKeyForPath:path size:size]];
+        [self readyToRequest:request];
+    }
 }
 
+- (void)loadThumbnail:(NSString *)path ofSize:(NSString *)size intoPath:(NSString *)destinationPath {
 
+    [self _loadThumbnail:path ofSize:size intoPath:destinationPath metadata:nil];
+}
+
+- (void)loadThumbnailWithMetadata:(VdiskMetadata *)metadata ofSize:(NSString *)size intoPath:(NSString *)destinationPath params:(NSDictionary *)params {
+
+    if ([metadata isKindOfClass:[VdiskSharesMetadata class]]) {
+        
+        NSMutableDictionary *mutableParams = nil;
+        
+        if (params != nil) {
+            
+            mutableParams = [NSMutableDictionary dictionaryWithDictionary:params];
+            
+        } else {
+            
+            mutableParams = [NSMutableDictionary dictionary];
+        }
+        
+        if (size) {
+            
+            [mutableParams setObject:size forKey:@"size"];
+        }
+        
+        NSString *apiName = nil;
+        
+        if ([(VdiskSharesMetadata *)metadata sharesMetadataType] == kVdiskSharesMetadataTypePublic) {
+            
+            apiName = @"/share/thumbnails";
+            
+            [mutableParams setValue:[(VdiskSharesMetadata *)metadata cpRef] forKey:@"copy_ref"];
+            [mutableParams setValue:@"signRequest" forKey:@"x-vdisk-local-userinfo"];
+            
+        } else if ([(VdiskSharesMetadata *)metadata sharesMetadataType] == kVdiskSharesMetadataTypeFromFriend) {
+            
+            apiName = @"/sharefriend/thumbnails";
+            
+            [mutableParams setValue:[(VdiskSharesMetadata *)metadata cpRef] forKey:@"from_copy_ref"];
+            
+            if ([(VdiskSharesMetadata *)metadata path] && [[(VdiskSharesMetadata *)metadata path] isKindOfClass:[NSString class]]) {
+                
+                [mutableParams setValue:[(VdiskSharesMetadata *)metadata path] forKey:@"path"];
+            }
+            
+        } else if ([(VdiskSharesMetadata *)metadata sharesMetadataType] == kVdiskSharesMetadataTypeLinkcommon) {
+            
+            apiName = @"/linkcommon/thumbnails";
+            
+            [mutableParams setValue:[(VdiskSharesMetadata *)metadata cpRef] forKey:@"from_copy_ref"];
+            [mutableParams setValue:[(VdiskSharesMetadata *)metadata accessCode] forKey:@"access_code"];
+        }
+        
+        ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
+        
+        VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadThumbnail:)]
+                                        autorelease];
+        
+        request.downloadProgressSelector = @selector(requestLoadThumbnailProgress:);
+        
+        request.resultFilename = destinationPath;
+        
+        request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                            _root, @"root",
+                            metadata.path, @"path",
+                            destinationPath, @"destinationPath",
+                            size, @"size",
+                            metadata, @"metadata", nil];
+        
+        [request setAllowResumeForFileDownloads:NO];
+        
+        if (![_imageLoadRequests objectForKey:[self thumbnailKeyForMetadata:metadata size:size]]) {
+            
+            [_imageLoadRequests setObject:request forKey:[self thumbnailKeyForMetadata:metadata size:size]];
+            [self readyToRequest:request];
+        }
+        
+    } else if ([metadata isKindOfClass:[VdiskMetadata class]]) {
+    
+        [self _loadThumbnail:metadata.path ofSize:size intoPath:destinationPath metadata:metadata];
+    }
+}
+
+- (void)requestLoadThumbnailProgress:(VdiskComplexRequest *)request {
+
+    if ([_delegate respondsToSelector:@selector(restClient:loadThumbnailProgress:destPath:metadata:size:)]) {
+        
+        NSString *filename = request.resultFilename;
+        
+        VdiskMetadata *metadata = [request.userInfo objectForKey:@"metadata"];
+        NSString *size = [request.userInfo objectForKey:@"size"];
+        
+        if (metadata == nil) {
+
+            NSDictionary *metadataDict = [request xVdiskMetadataJSON];
+            metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
+        }
+        
+        [_delegate restClient:self loadThumbnailProgress:request.downloadProgress destPath:filename metadata:metadata size:size];
+    }
+}
 
 - (void)requestDidLoadThumbnail:(VdiskComplexRequest *)request {
+    
+    VdiskMetadata *metadata = [request.userInfo objectForKey:@"metadata"];
+    
+    if (metadata == nil) {
+        
+        NSDictionary *metadataDict = [request xVdiskMetadataJSON];
+        metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
+    }
     
     if (request.error) {
     
         [self checkForAuthenticationFailure:request];
         
-        if ([_delegate respondsToSelector:@selector(restClient:loadThumbnailFailedWithError:)]) {
+        if ([_delegate respondsToSelector:@selector(restClient:loadThumbnailFailedWithError:metadata:size:)]) {
+            
+            NSString *size = [request.userInfo objectForKey:@"size"];
+            [_delegate restClient:self loadThumbnailFailedWithError:request.error metadata:metadata size:size];
+            
+        } else if ([_delegate respondsToSelector:@selector(restClient:loadThumbnailFailedWithError:)]) {
         
             [_delegate restClient:self loadThumbnailFailedWithError:request.error];
         }
@@ -677,12 +886,11 @@
     } else {
         
         NSString *filename = request.resultFilename;
-        NSDictionary *metadataDict = [request xVdiskMetadataJSON];
         
-        if ([_delegate respondsToSelector:@selector(restClient:loadedThumbnail:metadata:)]) {
+        if ([_delegate respondsToSelector:@selector(restClient:loadedThumbnail:metadata:size:)]) {
         
-            VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
-            [_delegate restClient:self loadedThumbnail:filename metadata:metadata];
+            NSString *size = [request.userInfo objectForKey:@"size"];
+            [_delegate restClient:self loadedThumbnail:filename metadata:metadata size:size];
         
         } else if ([_delegate respondsToSelector:@selector(restClient:loadedThumbnail:)]) {
             
@@ -696,6 +904,7 @@
     NSString *size = [request.userInfo objectForKey:@"size"];
     
     [_imageLoadRequests removeObjectForKey:[self thumbnailKeyForPath:path size:size]];
+    [_imageLoadRequests removeObjectForKey:[self thumbnailKeyForMetadata:metadata size:size]];
 }
 
 
@@ -706,7 +915,19 @@
     
     if (request) {
     
-        [request cancel];
+        [request clearSelectorsAndCancel];
+        [_imageLoadRequests removeObjectForKey:key];
+    }
+}
+
+- (void)cancelThumbnailLoadWithMetadata:(VdiskMetadata *)metadata size:(NSString *)size {
+    
+    NSString *key = [self thumbnailKeyForMetadata:metadata size:size];
+    VdiskComplexRequest *request = [_imageLoadRequests objectForKey:key];
+    
+    if (request) {
+        
+        [request clearSelectorsAndCancel];
         [_imageLoadRequests removeObjectForKey:key];
     }
 }
@@ -734,7 +955,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidLocateComplexUploadHost:(VdiskComplexRequest *)request {
@@ -806,7 +1027,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidInitializeComplexUpload:(VdiskComplexRequest *)request {
@@ -881,7 +1102,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidSignComplexUpload:(VdiskComplexRequest *)request {
@@ -958,7 +1179,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidMergeComplexUpload:(VdiskComplexRequest *)request {
@@ -1072,17 +1293,23 @@
     
     //HTTPS
     NSString *urlString = [NSString stringWithFormat:@"%@://%@/%@/files_put/%@%@", protocol, contentHost, kVdiskAPIVersion, root, [VdiskRestClient escapePath:destPath]];
-    
-    //?s1nau1d=
-    
+        
     if (params != nil && [params isKindOfClass:[NSDictionary class]] && [params count] > 0) {
         
         urlString = [urlString stringByAppendingFormat:@"?%@", [VdiskRequest stringFromDictionary:params]];
     }
     
+    
+    //add globalParams
+    if ([[_session.globalParams allKeys] count] > 0) {
+        
+        urlString = [VdiskRequest serializeURL:urlString params:_session.globalParams httpMethod:@"GET"];
+    }
+    
+    
     NSString *contentLength = [NSString stringWithFormat: @"%qu", [fileAttrs fileSize]];
     
-    
+    //NSDictionary *httpHeaderFields = @{@"Content-Length" : contentLength, @"Content-Type" : @"application/octet-stream", @"User-Agent" : [VdiskSession userAgent], @"Expect" : @"100-continue"};
     NSDictionary *httpHeaderFields = @{@"Content-Length" : contentLength, @"Content-Type" : @"application/octet-stream", @"User-Agent" : [VdiskSession userAgent]};
     
     ASIFormDataRequest *urlRequest = [[VdiskRequest requestWithURL:urlString httpMethod:@"PUT" params:nil httpHeaderFields:httpHeaderFields udid:_session.udid delegate:nil] finalRequest];
@@ -1113,7 +1340,7 @@
     
     [_uploadRequests setObject:request forKey:destPath];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)uploadFile:(NSString *)filename toPath:(NSString *)path fromPath:(NSString *)sourcePath {
@@ -1185,7 +1412,7 @@
     
     if (request) {
     
-        [request cancel];
+        [request clearSelectorsAndCancel];
         [_uploadRequests removeObjectForKey:path];
     }
 }
@@ -1222,7 +1449,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidLoadRevisions:(VdiskComplexRequest *)request {
@@ -1275,7 +1502,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidRestoreFile:(VdiskComplexRequest *)request {
@@ -1321,7 +1548,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1369,7 +1596,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1414,7 +1641,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1457,7 +1684,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidCreateCopyRefAndAccessCode:(VdiskComplexRequest *)request {
@@ -1501,7 +1728,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1547,7 +1774,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidCopyFromRefWithAccessCode:(VdiskComplexRequest *)request {
@@ -1623,7 +1850,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)copyFromMyFriendRef:(NSString *)copyRef toPath:(NSString *)toPath {
@@ -1702,7 +1929,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidCopyFromRef:(VdiskComplexRequest *)request {
@@ -1749,7 +1976,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1800,7 +2027,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1845,7 +2072,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 
@@ -1909,7 +2136,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
     
 }
 
@@ -1978,7 +2205,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidLoadSharableLink:(VdiskComplexRequest *)request {
@@ -2034,7 +2261,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)loadStreamableURLForFile:(NSString *)path {
@@ -2090,7 +2317,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)loadStreamableURLFromRef:(NSString *)copyRef {
@@ -2156,7 +2383,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidBlitz:(VdiskComplexRequest *)request {
@@ -2286,7 +2513,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 
 }
 
@@ -2390,7 +2617,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)loadSharesMetadata:(NSString *)cpRef {
@@ -2480,7 +2707,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)loadSharesMetadata:(NSString *)cpRef withAccessCode:(NSString *)accessCode {
@@ -2521,7 +2748,9 @@
                 
             } else {
                 
-                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result sharesMetadataType:kVdiskSharesMetadataTypeLinkcommon] autorelease];
+                NSString *accessCode = [request.userInfo objectForKey:@"access_code"];
+                
+                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result sharesMetadataType:kVdiskSharesMetadataTypeLinkcommon accessCode:accessCode] autorelease];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -2566,7 +2795,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)loadSharesMetadataFromMyFriend:(NSString *)cpRef {
@@ -2653,7 +2882,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidLoadSharesCategory:(VdiskComplexRequest *)request {
@@ -2740,7 +2969,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidCallWeiboAPI:(VdiskComplexRequest *)request {
@@ -2794,7 +3023,7 @@
     
     [_requests addObject:request];
     
-    [request start];
+    [self readyToRequest:request];
 }
 
 - (void)requestDidCallOthersAPI:(VdiskComplexRequest *)request {
@@ -2890,6 +3119,56 @@
     [request setURL:[NSURL URLWithString:urlString]];
 }
 
++ (NSString *)humanReadableAppleSize:(unsigned long long)length {
+
+    /*
+     
+     x < 1000字节， 显示：xxx字节
+     1000 <= x <= 1024字节， 显示1KB
+     1024字节 < x < 1000KB， 显示：xxxKB
+     1000KB <= x < 1000MB， 显示：xxx.x MB
+     1000MB <= x < 1G, 显示：xxx.xx GB
+     x >= 1G : humanReadableSize:
+     
+     */
+	
+	NSArray *filesizename = [NSArray arrayWithObjects:@" 字节", @" KB", @" MB", @" GB", @" TB", @" PB", @" EB", @" ZB", @" YB", nil];
+	
+	if (length > 0) {
+		
+        if (length < 1000) {
+            
+            return [NSString stringWithFormat:@"%llu%@", length, [filesizename objectAtIndex:0]];
+        
+        } else if (length >= 1000 && length <= 1024) {
+        
+            return [NSString stringWithFormat:@"1%@", [filesizename objectAtIndex:1]];
+            
+        } else if (length > 1024 && length < 1024 * 1000) {
+            
+            double s = length / pow(1024, 1);
+            return [NSString stringWithFormat:@"%.0f%@", s, [filesizename objectAtIndex:1]];
+        
+        } else if (length >= 1024 * 1000 && length < 1024 * 1024 * 1000) {
+            
+            double s = length / pow(1024, 2);
+            return [NSString stringWithFormat:@"%.1f%@", s, [filesizename objectAtIndex:2]];
+            
+        } else if (length >= 1024 * 1024 * 1000 && length < 1024 * 1024 * 1024) {
+        
+            double s = length / pow(1024, 3);
+            return [NSString stringWithFormat:@"%.2f%@", s, [filesizename objectAtIndex:3]];
+        
+        } else {
+        
+            return [VdiskRestClient humanReadableSize:length];
+        }
+	}
+	
+	return @"0 字节";
+}
+
+
 + (NSString *)humanReadableSize:(unsigned long long)length {
 	
 	NSArray *filesizename = [NSArray arrayWithObjects:@" Bytes", @" KB", @" MB", @" GB", @" TB", @" PB", @" EB", @" ZB", @" YB", nil];
@@ -2897,6 +3176,7 @@
 	if (length > 0) {
 		
 		int i = floor(log2(length) / 10);
+        if (i > 8) i = 8;
 		double s = length / pow(1024, i);
         
 		return [NSString stringWithFormat:@"%.2f%@", s, [filesizename objectAtIndex:i]];
@@ -2968,7 +3248,6 @@
     
     NSString *escapedPath = [VdiskRestClient escapePath:path];
     
-    //?s1nau1d=
     NSString *urlString = [NSString stringWithFormat:@"%@://%@/%@%@", kVdiskProtocolHTTPS, host, kVdiskAPIVersion, escapedPath];
     
     if (params != nil && [params objectForKey:@"x-vdisk-local-userinfo"]) {
@@ -2988,6 +3267,12 @@
         }
     }
     
+    //add globalParams
+    if ([[_session.globalParams allKeys] count] > 0) {
+        
+        urlString = [VdiskRequest serializeURL:urlString params:_session.globalParams httpMethod:@"GET"];
+    }
+
     VdiskRequest *request;
     
     if (needSign) {

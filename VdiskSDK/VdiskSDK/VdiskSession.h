@@ -110,6 +110,7 @@ typedef enum {
 @property (nonatomic, readonly) VdiskSessionType sessionType;
 @property (nonatomic, retain) VdiskAuthorize *authorize;
 @property (nonatomic, retain) SinaWeibo *sinaWeibo;
+@property (nonatomic, readonly) NSMutableDictionary *globalParams;
 @property (nonatomic, assign) id<VdiskSessionDelegate> delegate;
 
 
@@ -144,6 +145,7 @@ typedef enum {
 
 - (NSDictionary *)requestHeadersWithAuthorization;
 
++ (void)userAgentAddition:(NSString *)userAgentAddition;
 + (NSString *)userAgent;
 + (VdiskSession *)sharedSession;
 + (void)setSharedSession:(VdiskSession *)session;

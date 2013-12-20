@@ -52,6 +52,8 @@ typedef enum {
     NSString *_thumbnail;
     
     int _sharesMetadataType;
+    
+    NSString *_accessCode;
 }
 
 @property (nonatomic, readonly) NSString *appKey;
@@ -87,6 +89,9 @@ typedef enum {
 
 @property (nonatomic, assign) int sharesMetadataType;
 
+@property (nonatomic, readonly) NSString *accessCode;
+
 - (id)initWithDictionary:(NSDictionary *)dict sharesMetadataType:(kVdiskSharesMetadataType)sharesMetadataType;
+- (id)initWithDictionary:(NSDictionary *)dict sharesMetadataType:(kVdiskSharesMetadataType)sharesMetadataType accessCode:(NSString *)accessCode;
 
 @end

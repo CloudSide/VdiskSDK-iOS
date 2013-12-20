@@ -26,7 +26,7 @@
  create an NSData object with the result. When it has completed downloading the URL, it will
  notify the target with a selector that takes the VdiskRequest as the only parameter. */
 
-@interface VdiskComplexRequest : NSObject <ASIHTTPRequestDelegate, ASIProgressDelegate> {
+@interface VdiskComplexRequest : NSOperation <ASIHTTPRequestDelegate, ASIProgressDelegate> {
 
     ASIFormDataRequest *_request;
     
@@ -61,11 +61,13 @@
 - (id)initWithRequest:(ASIFormDataRequest *)request andInformTarget:(id)target selector:(SEL)selector;
 
 
-- (void)start;
+//- (void)start;
 
 /*  Cancels the request and prevents it from sending additional messages to the delegate. */
 
-- (void)cancel;
+//- (void)cancel;
+
+- (void)clearSelectorsAndCancel;
 
 /* If there is no error, it will parse the response as JSON and make sure the JSON object is the
  correct type. If not, it will set the error object with an error code of VdiskErrorInvalidResponse */
@@ -94,6 +96,11 @@
 @property (nonatomic, readonly) NSString *resultString;
 @property (nonatomic, readonly) NSObject *resultJSON;
 @property (nonatomic, readonly) NSError *error;
+
+@property (nonatomic, retain) VdiskMetadata *metadataForDownload;
+
+@property (nonatomic, assign) BOOL allowResumeForFileDownloads;
+
 
 @end
 

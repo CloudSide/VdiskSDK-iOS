@@ -16,4 +16,4 @@
 //  Copyright (c) 2012 Sina Vdisk. All rights reserved.
 //
 
-#define VDISK_FIX_CATEGORY_BUG(name) @interface VDISK_FIX_CATEGORY_BUG##name @end @implementation VDISK_FIX_CATEGORY_BUG##name @end
+#define VDISK_FIX_CATEGORY_BUG(name) @interface VDISK_FIX_CATEGORY_BUG##name : NSObject @end @implementation VDISK_FIX_CATEGORY_BUG##name @end

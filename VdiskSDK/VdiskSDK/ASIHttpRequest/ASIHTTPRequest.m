@@ -1229,6 +1229,8 @@ static NSOperationQueue *sharedQueue = nil;
             CFReadStreamSetProperty((CFReadStreamRef)[self readStream], 
                                     kCFStreamPropertySSLSettings, 
                                     (CFTypeRef)sslProperties);
+            
+            [sslProperties release];
         } 
         
         // Tell CFNetwork to use a client certificate
@@ -4578,7 +4580,11 @@ static NSOperationQueue *sharedQueue = nil;
 	for (NSNumber *bytes in bandwidthUsageTracker) {
 		totalBytes += [bytes unsignedLongValue];
 	}
-	averageBandwidthUsedPerSecond = totalBytes/measurements;		
+    
+    if (measurements > 0) {
+        
+        averageBandwidthUsedPerSecond = totalBytes/measurements;
+    }
 }
 
 + (unsigned long)averageBandwidthUsedPerSecond
@@ -4876,7 +4882,8 @@ static NSOperationQueue *sharedQueue = nil;
   
 	// RFC 2612 says max-age must override any Expires header
 	if (maxAge) {
-		return [[NSDate date] addTimeInterval:maxAge];
+		//return [[NSDate date] addTimeInterval:maxAge];
+        return [[NSData data] dateByAddingTimeInterval:maxAge];
 	} else {
 		NSString *expires = [responseHeaders objectForKey:@"Expires"];
 		if (expires) {

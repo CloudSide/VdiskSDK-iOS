@@ -26,6 +26,26 @@
 @synthesize userId = _userId;
 @synthesize sinaUserId = _sinaUserId;
 
+@synthesize screenname = _screenname;
+@synthesize username = _username;
+@synthesize avatarLarge = _avatarLarge;
+@synthesize avatar = _avatar;
+
+
+/*
+ 
+
+ 
+
+ screen_name: "一个开发者",
+ user_name: "一个开发者",
+ profile_image_url: "http://tp2.sinaimg.cn/1656360925/50/5622701668/1",
+ avatar_large: "http://tp2.sinaimg.cn/1656360925/180/5622701668/1",
+
+ 
+ */
+
+
 
 - (id)initWithDictionary:(NSDictionary *)dict {
     
@@ -37,8 +57,6 @@
         
             _quota = [[VdiskQuota alloc] initWithDictionary:[dict objectForKey:@"quota_info"]];
         }
-        
-        
         
         if ([[dict objectForKey:@"uid"] isKindOfClass:[NSNumber class]]) {
             
@@ -58,7 +76,31 @@
             _sinaUserId = [[dict objectForKey:@"sina_uid"] retain];
         }
         
-       
+        
+        if ([dict objectForKey:@"screen_name"]) {
+            
+            _screenname = [[dict objectForKey:@"screen_name"] retain];
+            
+        }
+        
+        if ([dict objectForKey:@"user_name"]) {
+            
+            _username = [[dict objectForKey:@"user_name"] retain];
+            
+        }
+        
+        if ([dict objectForKey:@"profile_image_url"]) {
+            
+            _avatarLarge = [[NSURL URLWithString:[dict objectForKey:@"profile_image_url"]] retain];
+        }
+        
+        if ([dict objectForKey:@"avatar_large"]) {
+            
+            
+            _avatar = [[NSURL URLWithString:[dict objectForKey:@"avatar_large"]] retain];
+        }
+        
+        
         _original = [dict retain];
     }
     
@@ -71,6 +113,11 @@
     [_userId release];
     [_sinaUserId release];
     [_original release];
+    
+    [_screenname release];
+    [_username release];
+    [_avatarLarge release];
+    [_avatar release];
     
     [super dealloc];
 }
@@ -100,12 +147,12 @@
         NSDictionary *quotaDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:tempQuota.consumedBytes], @"consumed", [NSNumber numberWithLongLong:tempQuota.totalBytes], @"quota", nil];
         
         [mDict setObject:quotaDict forKey:@"quota_info"];
-
-        NSNumber *uid = [NSNumber numberWithLongLong:[[coder decodeObjectForKey:@"userId"] longLongValue]];
-        NSNumber *sinaUid = [NSNumber numberWithLongLong:[[coder decodeObjectForKey:@"sinaUserId"] longLongValue]];
-        
-        [mDict setObject:uid forKey:@"uid"];
-        [mDict setObject:sinaUid forKey:@"sina_uid"];
+        [mDict setObject:[coder decodeObjectForKey:@"uid"] forKey:@"uid"];
+        [mDict setObject:[coder decodeObjectForKey:@"sina_uid"] forKey:@"sina_uid"];
+        [mDict setObject:[coder decodeObjectForKey:@"screen_name"] forKey:@"screen_name"];
+        [mDict setObject:[coder decodeObjectForKey:@"user_name"] forKey:@"user_name"];
+        [mDict setObject:[(NSURL *)[coder decodeObjectForKey:@"profile_image_url"] absoluteString] forKey:@"profile_image_url"];
+        [mDict setObject:[(NSURL *)[coder decodeObjectForKey:@"avatar_large"] absoluteString] forKey:@"avatar_large"];
         
 
         return [self initWithDictionary:mDict];

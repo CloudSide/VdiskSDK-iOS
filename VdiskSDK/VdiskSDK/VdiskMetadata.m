@@ -188,7 +188,7 @@
     VdiskMetadata *other = (VdiskMetadata *)object;
     //return [self.rev isEqualToString:other.rev];
     
-    return [_path isEqualToString:other.path] && ((!self.isDirectory && [self.rev isEqual:other.rev] && [self.fileSha1 isEqual:other.fileSha1]) || (self.isDirectory && [self.rev isEqual:other.rev] && [self.hash isEqual:other.hash]));
+    return [_path isEqualToString:other.path] && ((!self.isDirectory && [self.rev isEqual:other.rev] && [self.fileSha1 isEqual:other.fileSha1]) || (self.isDirectory && [self.rev isEqual:other.rev] /*&& [self.hash isEqual:other.hash]*/));
 }
 
 - (NSString *)filename {

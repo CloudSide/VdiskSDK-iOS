@@ -27,10 +27,19 @@
 
 id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
 
+static NSThread *kVdiskComplexRequestThread = nil;
+
 @interface VdiskComplexRequest () {
 
     CLog *_clog;
     CLog *_downloadClog;
+    
+    BOOL _cancelled;
+    BOOL _finished;
+    BOOL _inProgress;
+    BOOL _complete;
+    
+    NSRecursiveLock *_cancelledLock;
 }
 
 - (void)setError:(NSError *)error;
@@ -54,6 +63,55 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
 @synthesize resultFilename = _resultFilename;
 @synthesize error = _error;
 
+@synthesize metadataForDownload = _metadataForDownload;
+
+@synthesize allowResumeForFileDownloads = _allowResumeForFileDownloads;
+
+
+#pragma mark threading behaviour
+
++ (NSThread *)threadForVdiskComplexRequest:(VdiskComplexRequest *)complexRequest {
+    
+	if (kVdiskComplexRequestThread == nil) {
+        
+		@synchronized(self) {
+            
+            if (kVdiskComplexRequestThread == nil) {
+                
+                kVdiskComplexRequestThread = [[NSThread alloc] initWithTarget:self selector:@selector(runComplexRequests) object:nil];
+				[kVdiskComplexRequestThread start];
+			}
+		}
+	}
+    
+	return kVdiskComplexRequestThread;
+}
+
++ (void)runComplexRequests {
+    
+	// Should keep the runloop from exiting
+    
+	CFRunLoopSourceContext context = {0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	CFRunLoopSourceRef source = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &context);
+	CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+    
+    BOOL runAlways = YES; // Introduced to cheat Static Analyzer
+	
+    while (runAlways) {
+        
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		CFRunLoopRun();
+		[pool drain];
+	}
+    
+	// Should never be called, but anyway
+	CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+	CFRelease(source);
+}
+
+#pragma - mark
+
+
 
 
 + (void)setNetworkRequestDelegate:(id<VdiskNetworkRequestDelegate>)delegate {
@@ -65,6 +123,8 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     if ((self = [super init])) {
     
+        _cancelledLock = [[NSRecursiveLock alloc] init];
+        
         _request = [aRequest retain];
         [_request setDelegate:self];
         [_request setUploadProgressDelegate:self];
@@ -75,6 +135,8 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
         /* CLog */
         _clog = nil;
         _downloadClog = nil;
+        
+        _allowResumeForFileDownloads = YES;
 
     }
     
@@ -124,14 +186,42 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             }
         }
         
-        DDLogInfo(@"%@", _clog);
+        @try {
+            
+            if (_clog.clientErrorCode && _clog.elapsed && [_clog.clientErrorCode intValue] == 2 && [_clog.elapsed doubleValue] >= 35000.0f) {
+                
+                [_clog setClientErrorCode:@"1"];
+            }
+        
+        } @catch (NSException *exception) {
+            
+            NSLog(@"[VdiskComplexRequest dealloc]: %@", exception);
+            
+        } @finally {
+            
+            DDLogInfo(@"%@", _clog);
+        }
     }
 
     /* CLog */
 
     if (_downloadClog) {
         
-        DDLogInfo(@"%@", _downloadClog);
+        @try {
+            
+            if (_downloadClog.clientErrorCode && _downloadClog.elapsed && [_downloadClog.clientErrorCode intValue] == 2 && [_downloadClog.elapsed doubleValue] >= 35000.0f) {
+                
+                [_downloadClog setClientErrorCode:@"1"];
+            }
+        
+        } @catch (NSException *exception) {
+            
+            NSLog(@"[VdiskComplexRequest dealloc]: %@", exception);
+            
+        } @finally {
+            
+            DDLogInfo(@"%@", _downloadClog);
+        }
     }
     
     
@@ -150,10 +240,14 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     [_clog release], _clog = nil;
     [_downloadClog release], _downloadClog = nil;
     
+    [_cancelledLock release], _cancelledLock = nil;
+    
+    [_metadataForDownload release], _metadataForDownload = nil;
+    
     [super dealloc];
 }
 
-- (void)start {
+- (void)_main {
     
     /* CLog */
     
@@ -232,27 +326,6 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     return 0;
 }
 
-- (void)cancel {
-    
-    //[_request cancel];
-    [_request clearDelegatesAndCancel];
-    _target = nil;
-    
-    /* CLog */
-    
-    if (_tempFilename) {
-        
-        [_downloadClog setClientErrorCode:[NSString stringWithFormat:@"%d", ASIRequestCancelledErrorType]];
-        
-    } else {
-        
-        [_clog setClientErrorCode:[NSString stringWithFormat:@"%d", ASIRequestCancelledErrorType]];
-    }
-    
-    
-    [kVdiskNetworkRequestDelegate networkRequestStopped];
-}
-
 - (id)parseResponseAsType:(Class)cls {
     
     if (_error) return nil;
@@ -298,8 +371,12 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     [self startDownload:_request.url];
 }
 
-
 - (void)startDownload:(NSURL *)url {
+
+    [self startDownload:url allowResume:_allowResumeForFileDownloads];
+}
+
+- (void)startDownload:(NSURL *)url allowResume:(BOOL)allowResume {
 
     /*
      
@@ -340,7 +417,9 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             
             if (attributes && [attributes isKindOfClass:[NSDictionary class]] && [attributes objectForKey:@"NSFileSize"] && [(NSNumber *)[attributes objectForKey:@"NSFileSize"] unsignedLongLongValue] == fileLength) {
                 
-                if (_selector) {
+                [self markAsFinished];
+                
+                if (_selector && _target && [_target respondsToSelector:_selector]) {
                     
                     [_target performSelectorOnMainThread:_selector withObject:self waitUntilDone:YES];
                 }
@@ -366,7 +445,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     [_request setValidatesSecureCertificate:NO];
     [_request setDownloadDestinationPath:_resultFilename];
     [_request setTemporaryFileDownloadPath:_tempFilename];
-    [_request setAllowResumeForFileDownloads:YES];
+    [_request setAllowResumeForFileDownloads:allowResume];
     [_request setUserInfo:_userInfo];
     [_request setDelegate:self];
     [_request setDownloadProgressDelegate:self];
@@ -447,7 +526,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     }
     
     
-    if (_requestDidReceiveResponseSelector) {
+    if (_requestDidReceiveResponseSelector && _target && [_target respondsToSelector:_requestDidReceiveResponseSelector]) {
         
         [_target performSelector:_requestDidReceiveResponseSelector withObject:self];
     }
@@ -461,17 +540,25 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     if ([self statusCode] == 302) {
         
-        if (_requestWillRedirectSelector) {
-            
+        if (_target && _requestWillRedirectSelector && [_target respondsToSelector:_requestWillRedirectSelector]) {
+                        
+            CFRetain(self);
+
             id returnObject = [_target performSelector:_requestWillRedirectSelector withObject:self];
             
             if ([returnObject isKindOfClass:[NSNumber class]]) {
                 
                 if (![(NSNumber *)returnObject boolValue]) {
                     
+                    [self markAsFinished];
+                    [kVdiskNetworkRequestDelegate networkRequestStopped];
+                    CFRelease(self);
+                    
                     return;
                 }
             }
+            
+            CFRelease(self);
         }
         
         if (_resultFilename && [responseHeaders objectForKey:@"Location"]) {
@@ -648,9 +735,14 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
         //NSLog(@"%@", _downloadClog);
     }
     
-
+    [self markAsFinished];
+    
     SEL sel = (_error && _failureSelector) ? _failureSelector : _selector;
-    [_target performSelector:sel withObject:self];
+    
+    if (_target && [_target respondsToSelector:sel]) {
+        
+        [_target performSelector:sel withObject:self];
+    }
     
     [kVdiskNetworkRequestDelegate networkRequestStopped];
 }
@@ -725,8 +817,14 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
         _tempFilename = nil;
     }
     
+    [self markAsFinished];
+    
     SEL sel = _failureSelector ? _failureSelector : _selector;
-    [_target performSelector:sel withObject:self];
+    
+    if (_target && [_target respondsToSelector:sel]) {
+        
+        [_target performSelector:sel withObject:self];
+    }
     
     [kVdiskNetworkRequestDelegate networkRequestStopped];
     
@@ -744,7 +842,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             
             _downloadProgress = (CGFloat)_bytesDownloaded / (CGFloat)totalSize;
             
-            if (_downloadProgressSelector) {
+            if (_downloadProgressSelector && _target && [_target respondsToSelector:_downloadProgressSelector]) {
                 
                 [_target performSelector:_downloadProgressSelector withObject:self];
             }
@@ -768,7 +866,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
 
     _uploadProgress = newProgress;
     
-    if (_uploadProgressSelector) {
+    if (_uploadProgressSelector && _target && [_target respondsToSelector:_uploadProgressSelector]) {
         
         [_target performSelector:_uploadProgressSelector withObject:self];
     }
@@ -803,6 +901,184 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
 		VdiskLogWarning(@"VdiskSDK: error making request to %@ - %@", [[_request url] path], errorStr);
 	}
 }
+
+#pragma mark 重载
+
+- (void)main {
+    
+    [_cancelledLock lock];
+    
+    if (_complete || [self isCancelled]) {
+        
+        return;
+    }
+    
+    _complete = NO;
+    
+    if (_metadataForDownload != nil && [_metadataForDownload isKindOfClass:[VdiskMetadata class]]) {
+    
+        [self startDownloadWithMetadata:_metadataForDownload];
+        
+    } else {
+    
+        [self _main];
+    }
+    
+    [_cancelledLock unlock];
+}
+
+- (void)start {
+    
+    if ([self isCancelled] || _complete) {
+        
+        _inProgress = NO;
+        _finished = YES;
+        
+        return;
+    }
+    
+    _inProgress = YES;
+    
+    [self performSelector:@selector(main) onThread:[[self class] threadForVdiskComplexRequest:self] withObject:nil waitUntilDone:NO];
+    
+}
+
+- (void)markAsFinished {
+    
+	// Autoreleased requests may well be dealloced here otherwise
+	CFRetain(self);
+    
+	// dealloc won't be called when running with GC, so we'll clean these up now
+
+    BOOL wasInProgress = _inProgress;
+    BOOL wasFinished = _finished;
+    
+    if (!wasFinished) {
+        
+        [self willChangeValueForKey:@"isFinished"];
+    }
+    
+    if (wasInProgress) {
+        
+        [self willChangeValueForKey:@"isExecuting"];
+    }
+    
+    _inProgress = NO;
+    _finished = YES;
+    
+    if (wasInProgress) {
+        
+        [self didChangeValueForKey:@"isExecuting"];
+    }
+    
+    if (!wasFinished) {
+        
+        [self didChangeValueForKey:@"isFinished"];
+    }
+    
+    CFRunLoopStop(CFRunLoopGetCurrent());
+    
+	CFRelease(self);
+}
+
+
+- (BOOL)isConcurrent {
+    
+    return YES;
+}
+
+- (BOOL)isFinished {
+    
+	return _finished;
+}
+
+- (BOOL)isExecuting {
+    
+	return _inProgress;
+}
+
+- (BOOL)isCancelled {
+    
+    BOOL result;
+    
+	[_cancelledLock lock];
+    result = _cancelled;
+    [_cancelledLock unlock];
+    
+    return result;
+}
+
+- (void)_cancel {
+    
+    if (_target == nil && [self isExecuting]) {
+        
+        [self markAsFinished];
+    }
+        
+    [_request cancel];
+    
+    /*
+    [_request clearDelegatesAndCancel];
+    _target = nil;
+     */
+    
+    /* CLog */
+    
+    if (_request.delegate == nil) {
+        
+        if (_tempFilename) {
+            
+            [_downloadClog setClientErrorCode:[NSString stringWithFormat:@"%d", ASIRequestCancelledErrorType]];
+            
+        } else {
+            
+            [_clog setClientErrorCode:[NSString stringWithFormat:@"%d", ASIRequestCancelledErrorType]];
+        }
+    }
+    
+    [kVdiskNetworkRequestDelegate networkRequestStopped];
+}
+
+
+- (void)cancelOnComplexRequestThread {
+    
+	[_cancelledLock lock];
+    
+    if ([self isCancelled] || _complete) {
+        
+		[_cancelledLock unlock];
+        
+		return;
+	}
+    
+    [self _cancel];
+
+    _complete = YES;
+    
+	//TODO: 清理工作
+   
+	CFRetain(self);
+    [self willChangeValueForKey:@"isCancelled"];
+    _cancelled = YES;
+    [self didChangeValueForKey:@"isCancelled"];
+	[_cancelledLock unlock];
+	CFRelease(self);
+}
+
+- (void)cancel {
+    
+    [self performSelector:@selector(cancelOnComplexRequestThread) onThread:[[self class] threadForVdiskComplexRequest:self] withObject:nil waitUntilDone:NO];
+}
+
+- (void)clearSelectorsAndCancel {
+    
+	[_cancelledLock lock];
+    _target = nil;
+    _request.delegate = nil;
+	[_cancelledLock unlock];
+	[self cancel];
+}
+
 
 
 @end

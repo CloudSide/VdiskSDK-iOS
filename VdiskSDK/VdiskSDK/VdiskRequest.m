@@ -203,6 +203,8 @@
     [finalRequest setNumberOfTimesToRetryOnTimeout:3];
     [finalRequest addRequestHeader:@"x-vdisk-device-uuid" value:_udid];
     [finalRequest setShouldAttemptPersistentConnection:YES];
+    [finalRequest setTimeOutSeconds:16.0];
+    [finalRequest setPersistentConnectionTimeoutSeconds:30.0];
     
     /* 缓存相关
     [finalRequest setDownloadCache:[ASIDownloadCache sharedCache]];

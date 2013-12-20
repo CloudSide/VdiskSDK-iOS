@@ -23,6 +23,7 @@
 int ddLogLevel;
 
 static VdiskSession *kVdiskSharedSession = nil;
+static NSString *kUserAgentAddition = nil;
 
 @interface VdiskSession (Private) <VdiskRestClientDelegate>
 
@@ -53,6 +54,7 @@ static VdiskSession *kVdiskSharedSession = nil;
 @synthesize sessionType = _sessionType;
 //@synthesize weiboAccessToken = _weiboAccessToken;
 @synthesize udid = _udid;
+@synthesize globalParams = _globalParams;
 
 
 + (VdiskSession *)sharedSession {
@@ -80,6 +82,16 @@ static VdiskSession *kVdiskSharedSession = nil;
 
 #pragma mark - userAgent
 
++ (void)userAgentAddition:(NSString *)userAgentAddition {
+
+    if (kUserAgentAddition != nil) {
+        
+        [kUserAgentAddition release], kUserAgentAddition = nil;
+    }
+    
+    kUserAgentAddition = [userAgentAddition copy];
+}
+
 + (NSString *)userAgent {
     
     /*
@@ -99,8 +111,14 @@ static VdiskSession *kVdiskSharedSession = nil;
     return userAgent;
      */
     
-    return [ASIHTTPRequest defaultUserAgentString];
+    if (kUserAgentAddition != nil && [kUserAgentAddition length] > 0) {
+        
+        return [NSString stringWithFormat:@"%@ %@", [ASIHTTPRequest defaultUserAgentString], kUserAgentAddition];
+        
+    } else {
     
+        return [ASIHTTPRequest defaultUserAgentString];
+    }
 }
 
 
@@ -200,6 +218,8 @@ static VdiskSession *kVdiskSharedSession = nil;
 
     if (self = [super init]) {
         
+        _globalParams = [[NSMutableDictionary alloc] init];
+        
         [self setupLogger];
         
         self.appKey = appKey;
@@ -225,6 +245,8 @@ static VdiskSession *kVdiskSharedSession = nil;
 }
 
 - (void)dealloc {
+    
+    [_globalParams release], _globalParams = nil;
     
     [_appKey release], _appKey = nil;
     [_appSecret release], _appSecret = nil;

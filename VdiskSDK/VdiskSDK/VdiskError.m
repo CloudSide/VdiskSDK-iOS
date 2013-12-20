@@ -171,6 +171,18 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
         case 10018:
             message = @"请求长度超过限制";
             break;
+        case 10022:
+            message = @"IP请求频次超过上限";
+            break;
+        case 10023:
+            message = @"用户请求频次超过上限";
+            break;
+        case 10024:
+            message = @"用户请求频次超过上限";
+            break;
+        case 20003:
+            message = @"用户不存在";
+            break;
         case 20006:
             message = @"图片太大";
             break;
@@ -300,7 +312,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"登录超时, 请重新登录(21332)";
             break;
         case 21334:
-            message = @"账号异常, 请先解除异常(21334)";
+            message = @"帐号异常, 请先解除异常(21334)";
             break;
         case 21324:
             message = @"client_id或client_secret参数无效(21324)";
@@ -323,7 +335,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"操作无效(40001)";
             break;
         case 40002:
-            message = @"路径错误, 不能包含特殊字符.";
+            message = @"路径错误, 不能包含特殊字符, 或者路径过长.";
             break;
         case 40003:
             message = @"目标路径不存在.";
@@ -371,7 +383,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"Forbidden. Your IP is not permitted to access(40311).";
             break;
         case 40312:
-            message = @"该文件或目录不允许被分享.";
+            message = @"文件或目录没有被分享.";
             break;
         case 40313:
             message = @"分享操作涉及到文件或目录过多.";
@@ -380,7 +392,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
             message = @"目标文件夹已存在.";
             break;
         case 40317:
-            message = @"账号异常, 您可能没有开通微博或者账号被屏蔽.";
+            message = @"帐号异常, 您可能没有开通微博或者帐号被屏蔽.";
             break;
         case 40401:
             message = @"用户不存在.";
@@ -509,7 +521,7 @@ NSString *VdiskErrorMessageWithCode(NSError *error) {
         
             if ([error localizedDescription] && [[error localizedDescription] length] > 0) {
                 
-                message = [NSString stringWithFormat:@"%@(%d)", [error localizedDescription], errorCode];
+                message = [NSString stringWithFormat:@"未知错误:%@(%d)", [error localizedDescription], errorCode];
                 
             } else {
             

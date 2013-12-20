@@ -107,9 +107,9 @@ typedef enum {
 #define kVdiskAccessTokenURL                    @"https://auth.sina.com.cn/oauth2/access_token"
 #define kVdiskLogsReportURL                     @"http://content.weipan.cn/2/report/new"             //@"http://test.php.weipan.cn/2/report/new"
 
-#define kVdiskSDKVersion                        @"1.1.1"                                            //TODO: parameterize from build system
+#define kVdiskSDKVersion                        @"1.2.1"                                            //TODO: parameterize from build system
 #define kVdiskAPIHost                           @"api.weipan.cn"
-//#define kVdiskAPIHost                           @"20.vdiskapi.appsina.com"                          /* [Cloud Mario] ... */
+//#define kVdiskAPIHost                           @"5.vdiskapi.appsina.com"                          /* [Cloud Mario] ... */
 //#define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn:4443"
 #define kVdiskAPIContentSafeHost                @"upload-vdisk.sina.com.cn"
 #define kVdiskAPIContentHost                    @"upload-vdisk.sina.com.cn"

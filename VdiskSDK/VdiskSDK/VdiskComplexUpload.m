@@ -15,7 +15,7 @@
 //- (void)_createSha1;
 - (void)_uploadInit;
 - (void)_sign;
-- (void)_createMd5s;
+- (BOOL)_createMd5s;
 - (void)_upload;
 - (void)_merge;
 
@@ -430,7 +430,7 @@
 	NSError *statError = nil;
 	NSDictionary *stat = [fileManager attributesOfItemAtPath:_sourcePath error:&statError];
     
-    if (stat == nil) {
+    if (statError || stat == nil || (stat && [stat fileSize] == 0)) {
         
         [self _setError:[NSError errorWithDomain:kVdiskErrorDomain code:kVdiskErrorFileNotFound userInfo:_userinfo]];
         
@@ -739,7 +739,7 @@
     
     if (_uploadRequest) {
         
-        [_uploadRequest cancel];
+        [_uploadRequest clearSelectorsAndCancel];
     }
     
     [self clear];
@@ -747,7 +747,7 @@
 
 - (void)clear {
     
-    [_uploadRequest cancel];
+    [_uploadRequest clearSelectorsAndCancel];
     _isCancelled = NO;
     _force = NO;
     
@@ -868,7 +868,7 @@
         
         [self clear];
         
-        if ([_delegate respondsToSelector:@selector(complexUpload:uploadBigFileFailedWithError:)]) {
+        if ([_delegate respondsToSelector:@selector(complexUpload:failedWithError:destPath:srcPath:)]) {
             
             [self _setError:[NSError errorWithDomain:kVdiskErrorDomain code:kVdiskErrorInvalidResponse userInfo:_userinfo]];
             
